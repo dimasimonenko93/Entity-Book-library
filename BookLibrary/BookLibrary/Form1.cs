@@ -23,6 +23,13 @@ namespace BookLibrary
 
                 db.Books.Add(book1);
                 db.Books.Add(book2);
+                db.Books.Add(book2);
+
+                Reader reader1 = new Reader { Name = "Alex" };
+
+                db.Readers.Add(reader1);
+                db.Readers.Add(reader1);
+
                 db.SaveChanges();
             }
         }
