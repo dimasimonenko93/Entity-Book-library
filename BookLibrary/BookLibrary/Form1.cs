@@ -16,7 +16,7 @@ namespace BookLibrary
         {
             InitializeComponent();
 
-            using (BookContext db = new BookContext())
+            using (LibraryContext db = new LibraryContext())
             {
                 Book book1 = new Book { Name = "Mathematics" };
                 Book book2 = new Book { Name = "Geography" };
