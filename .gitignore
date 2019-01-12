@@ -10,3 +10,5 @@ BookLibrary/ClassLibrary1/Properties/AssemblyInfo.cs
 BookLibrary/ClassLibrary1/DatabaseConnection.csproj
 BookLibrary/ClassLibrary1/Class2.cs
 BookLibrary/ClassLibrary1/Class1.cs
+BookLibrary/BusinessLogic/bin/
+BookLibrary/DatabaseConnection/bin/

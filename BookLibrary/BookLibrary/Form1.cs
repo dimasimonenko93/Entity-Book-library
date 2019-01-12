@@ -8,33 +8,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BusinessLogic;
 
 namespace BookLibrary
 {
     public partial class Form1 : Form
     {
+        DatabaseManagement databaseManagement;
+
         public Form1()
         {
             InitializeComponent();
 
-            //using (LibraryContext db = new LibraryContext())
-            //{
-            //    Book book1 = new Book { Name = "Mathematics" };
-            //    Book book2 = new Book { Name = "Geography" };
+            databaseManagement = new DatabaseManagement();
 
-            //    db.Books.Add(book1);
-            //    db.Books.Add(book2);
-            //    db.Books.Add(book2);
+            dataGridViewBooks.DataSource = databaseManagement.DataGridViewBooks();
 
-            //    Reader reader1 = new Reader { Name = "Alex" };
+            dataGridViewReaders.DataSource = databaseManagement.DataGridViewReaders();
 
-            //    db.Readers.Add(reader1);
-            //    db.Readers.Add(reader1);
-            //    db.Books.Where(e => e.Name == "Mathematics").Count();
-
-            //    dataGridView1.DataSource = db.Books.Local.ToBindingList();
-            //    //db.SaveChanges();
-            //}
         }
     }
 }
