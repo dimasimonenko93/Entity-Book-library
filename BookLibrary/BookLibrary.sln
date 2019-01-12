@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookLibrary", "BookLibrary\BookLibrary.csproj", "{91AE1082-B106-4344-82ED-529A1BA64FCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseConnection", "DatabaseConnection\DatabaseConnection.csproj", "{300DC048-AF62-4325-89AE-8BE5E5E12E0A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogic", "BusinessLogic\BusinessLogic.csproj", "{05CFABE3-0CF6-4712-B7AA-9251B928C603}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{91AE1082-B106-4344-82ED-529A1BA64FCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91AE1082-B106-4344-82ED-529A1BA64FCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91AE1082-B106-4344-82ED-529A1BA64FCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{300DC048-AF62-4325-89AE-8BE5E5E12E0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{300DC048-AF62-4325-89AE-8BE5E5E12E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{300DC048-AF62-4325-89AE-8BE5E5E12E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{300DC048-AF62-4325-89AE-8BE5E5E12E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05CFABE3-0CF6-4712-B7AA-9251B928C603}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05CFABE3-0CF6-4712-B7AA-9251B928C603}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05CFABE3-0CF6-4712-B7AA-9251B928C603}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05CFABE3-0CF6-4712-B7AA-9251B928C603}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

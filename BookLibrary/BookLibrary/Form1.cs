@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -16,22 +17,24 @@ namespace BookLibrary
         {
             InitializeComponent();
 
-            using (LibraryContext db = new LibraryContext())
-            {
-                Book book1 = new Book { Name = "Mathematics" };
-                Book book2 = new Book { Name = "Geography" };
+            //using (LibraryContext db = new LibraryContext())
+            //{
+            //    Book book1 = new Book { Name = "Mathematics" };
+            //    Book book2 = new Book { Name = "Geography" };
 
-                db.Books.Add(book1);
-                db.Books.Add(book2);
-                db.Books.Add(book2);
+            //    db.Books.Add(book1);
+            //    db.Books.Add(book2);
+            //    db.Books.Add(book2);
 
-                Reader reader1 = new Reader { Name = "Alex" };
+            //    Reader reader1 = new Reader { Name = "Alex" };
 
-                db.Readers.Add(reader1);
-                db.Readers.Add(reader1);
+            //    db.Readers.Add(reader1);
+            //    db.Readers.Add(reader1);
+            //    db.Books.Where(e => e.Name == "Mathematics").Count();
 
-                db.SaveChanges();
-            }
+            //    dataGridView1.DataSource = db.Books.Local.ToBindingList();
+            //    //db.SaveChanges();
+            //}
         }
     }
 }

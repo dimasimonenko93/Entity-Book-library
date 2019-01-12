@@ -7,7 +7,7 @@ using System.Data.Entity;
 
 namespace BookLibrary
 {
-    class LibraryContext : DbContext
+    public class LibraryContext : DbContext
     {
         public LibraryContext() : base("DbConnection")
         {

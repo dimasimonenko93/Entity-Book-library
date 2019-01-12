@@ -3,3 +3,10 @@ BookLibrary/.vs/
 BookLibrary/BookLibrary/obj/
 BookLibrary/BookLibrary/bin/
 BookLibrary/packages/
+BookLibrary/BusinessLogic/obj/
+BookLibrary/ClassLibrary1/obj/
+BookLibrary/DatabaseConnection/obj/
+BookLibrary/ClassLibrary1/Properties/AssemblyInfo.cs
+BookLibrary/ClassLibrary1/DatabaseConnection.csproj
+BookLibrary/ClassLibrary1/Class2.cs
+BookLibrary/ClassLibrary1/Class1.cs
