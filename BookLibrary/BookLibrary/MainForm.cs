@@ -12,11 +12,11 @@ using BusinessLogic;
 
 namespace BookLibrary
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         Management databaseManagement;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -25,7 +25,18 @@ namespace BookLibrary
             dataGridViewBooks.DataSource = databaseManagement.LoadDataGridViewBooks();
 
             dataGridViewReaders.DataSource = databaseManagement.LoadDataGridViewReaders();
+        }
 
+        private void btnOpenFormNewBook_Click(object sender, EventArgs e)
+        {
+            AddNewBook addNewBook = new AddNewBook();
+            addNewBook.ShowDialog(this);
+        }
+
+        private void btnOpenFormNewReader_Click(object sender, EventArgs e)
+        {
+            AddNewReader addNewReader = new AddNewReader();
+            addNewReader.ShowDialog(this);
         }
     }
 }
