@@ -14,17 +14,17 @@ namespace BookLibrary
 {
     public partial class Form1 : Form
     {
-        DatabaseManagement databaseManagement;
+        Management databaseManagement;
 
         public Form1()
         {
             InitializeComponent();
 
-            databaseManagement = new DatabaseManagement();
+            databaseManagement = new Management();
 
-            dataGridViewBooks.DataSource = databaseManagement.DataGridViewBooks();
+            dataGridViewBooks.DataSource = databaseManagement.LoadDataGridViewBooks();
 
-            dataGridViewReaders.DataSource = databaseManagement.DataGridViewReaders();
+            dataGridViewReaders.DataSource = databaseManagement.LoadDataGridViewReaders();
 
         }
     }
