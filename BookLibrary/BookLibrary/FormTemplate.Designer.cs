@@ -1,6 +1,6 @@
 ﻿namespace BookLibrary
 {
-    partial class AddNewBook
+    partial class FormTemplate
     {
         /// <summary>
         /// Required designer variable.
@@ -30,14 +30,14 @@
         {
             this.SuspendLayout();
             // 
-            // AddNewBook
+            // FormTemplate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Name = "AddNewBook";
+            this.Name = "FormTemplate";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "New Book";
+            this.Text = "Form Template";
             this.ResumeLayout(false);
 
         }

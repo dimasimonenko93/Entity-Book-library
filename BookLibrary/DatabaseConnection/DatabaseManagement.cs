@@ -10,7 +10,7 @@ namespace BusinessLogic
 {
     public class DatabaseManagement
     {
-        public object GetBooks()
+        public object GetBooksToBindingList()
         {
             using (var bookLibraryDb = new LibraryContext())
             {
@@ -18,11 +18,27 @@ namespace BusinessLogic
             }
         }
 
-        public object GetReaders()
+        public object GetReadersToBindingList()
         {
             using (var bookLibraryDb = new LibraryContext())
             {
                 return bookLibraryDb.Readers.Local.ToBindingList();
+            }
+        }
+
+        public List<Book> GetAllBooks()
+        {
+            using (var bookLibraryDb = new LibraryContext())
+            {
+                return bookLibraryDb.Books.ToList();
+            }
+        }
+
+        public List<Reader> GetAllReaders()
+        {
+            using (var bookLibraryDb = new LibraryContext())
+            {
+                return bookLibraryDb.Readers.ToList();
             }
         }
     }

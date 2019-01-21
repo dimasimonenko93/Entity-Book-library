@@ -7,10 +7,11 @@ using System.Data.Entity;
 
 namespace BookLibrary
 {
-    public class LibraryContext : DbContext
+    internal class LibraryContext : DbContext
     {
         public LibraryContext() : base("DbConnection")
         {
+            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<LibraryContext>()); // Recreate DB with losing data, if structure of my database was changed.
         }
 
         public DbSet<Book>   Books   { get; set; }

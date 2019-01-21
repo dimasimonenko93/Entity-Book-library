@@ -14,29 +14,37 @@ namespace BookLibrary
 {
     public partial class MainForm : Form
     {
-        Management databaseManagement;
+        Management management;
 
         public MainForm()
         {
             InitializeComponent();
 
-            databaseManagement = new Management();
+            management = new Management();
 
-            dataGridViewBooks.DataSource = databaseManagement.LoadDataGridViewBooks();
+            dataGridViewBooks.DataSource = management.LoadDataGridViewBooks();
 
-            dataGridViewReaders.DataSource = databaseManagement.LoadDataGridViewReaders();
+            dataGridViewReaders.DataSource = management.LoadDataGridViewReaders();
         }
 
-        private void btnOpenFormNewBook_Click(object sender, EventArgs e)
+        private void tbSearchBooks_Enter(object sender, EventArgs e)
         {
-            AddNewBook addNewBook = new AddNewBook();
-            addNewBook.ShowDialog(this);
+            tbSearchBooks.Clear();
+            tbSearchBooks.ForeColor = Color.Black;
         }
 
-        private void btnOpenFormNewReader_Click(object sender, EventArgs e)
+        private void btnAdd_Click(object sender, EventArgs e)
         {
-            AddNewReader addNewReader = new AddNewReader();
-            addNewReader.ShowDialog(this);
+           var add = new FormTemplate();
+           add.Text = tabControl.SelectedTab.Name;
+           add.ShowDialog(this);
+        }
+
+        private void btnEdit_Click(object sender, EventArgs e)
+        {
+            var edit = new FormTemplate();
+            edit.Text = tabControl.SelectedTab.Name;
+            edit.ShowDialog(this);
         }
     }
 }

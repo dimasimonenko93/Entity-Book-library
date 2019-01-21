@@ -19,12 +19,12 @@ namespace BusinessLogic
 
         public object LoadDataGridViewBooks()
         {
-            return databaseManagement.GetBooks();
+            return databaseManagement.GetBooksToBindingList();
         }
 
         public object LoadDataGridViewReaders()
         {
-            return databaseManagement.GetReaders();
+            return databaseManagement.GetReadersToBindingList();
         }
     }
 }
