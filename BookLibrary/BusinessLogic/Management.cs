@@ -26,5 +26,11 @@ namespace BusinessLogic
         {
             return databaseManagement.GetReadersToBindingList();
         }
+
+        public void CreateBook()
+        {
+            var book = new Book();
+            databaseManagement.AddBook(book);
+        }
     }
 }

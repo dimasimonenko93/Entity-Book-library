@@ -12,33 +12,70 @@ namespace BusinessLogic
     {
         public object GetBooksToBindingList()
         {
-            using (var bookLibraryDb = new LibraryContext())
+            using (var db = new LibraryContext())
             {
-                return bookLibraryDb.Books.Local.ToBindingList();
+                return db.Books.Local.ToBindingList();
             }
         }
 
         public object GetReadersToBindingList()
         {
-            using (var bookLibraryDb = new LibraryContext())
+            using (var db = new LibraryContext())
             {
-                return bookLibraryDb.Readers.Local.ToBindingList();
+                return db.Readers.Local.ToBindingList();
             }
         }
 
         public List<Book> GetAllBooks()
         {
-            using (var bookLibraryDb = new LibraryContext())
+            using (var db = new LibraryContext())
             {
-                return bookLibraryDb.Books.ToList();
+                return db.Books.ToList();
             }
         }
 
         public List<Reader> GetAllReaders()
         {
-            using (var bookLibraryDb = new LibraryContext())
+            using (var db = new LibraryContext())
             {
-                return bookLibraryDb.Readers.ToList();
+                return db.Readers.ToList();
+            }
+        }
+
+        public void AddBook(Book b)
+        {
+            using (var db = new LibraryContext())
+            {
+                db.Books.Add(b);
+                db.SaveChanges();
+            }
+        }
+
+        public Book GetBook(Book b)
+        {
+            using(var db = new LibraryContext())
+            {
+                var book = db.Books.Find(b.Id);
+                return book;
+            }
+        }
+
+        public void EditBook(Book b)
+        {
+            using (var db = new LibraryContext())
+            {
+                var book = db.Books.Find(b.Id);
+                book = b;
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteBook(Book b)
+        {
+            using(var db = new LibraryContext())
+            {
+                db.Books.Remove(db.Books.Find(b.Id));
+                db.SaveChanges();
             }
         }
     }

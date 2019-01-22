@@ -37,14 +37,20 @@ namespace BookLibrary
         {
            var add = new FormTemplate();
            add.Text = tabControl.SelectedTab.Name;
-           add.ShowDialog(this);
+           
+           DialogResult result = add.ShowDialog(this);
+           if (result == DialogResult.Cancel)
+               return;
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
             var edit = new FormTemplate();
             edit.Text = tabControl.SelectedTab.Name;
-            edit.ShowDialog(this);
+
+            DialogResult result = edit.ShowDialog(this);
+            if (result == DialogResult.Cancel)
+                return;
         }
     }
 }
