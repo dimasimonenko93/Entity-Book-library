@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{05CFABE3-0CF6-4712-B7AA-9251B928C603}</ProjectGuid>
+    <ProjectGuid>{300DC048-AF62-4325-89AE-8BE5E5E12E0A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BusinessLogic</RootNamespace>
-    <AssemblyName>BusinessLogic</AssemblyName>
+    <RootNamespace>BookLibrary.DAL</RootNamespace>
+    <AssemblyName>BookLibrary.DAL</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -48,18 +48,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Management.cs" />
+    <Compile Include="DatabaseManagement.cs" />
+    <Compile Include="LibraryContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DatabaseConnection\DatabaseConnection.csproj">
-      <Project>{300dc048-af62-4325-89ae-8be5e5e12e0a}</Project>
-      <Name>DatabaseConnection</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BookLibrary.Models\BookLibrary.Models.csproj">
+      <Project>{f09c1e6e-9110-46e5-902e-3d910f9f92a4}</Project>
+      <Name>BookLibrary.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
