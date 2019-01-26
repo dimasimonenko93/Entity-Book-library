@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BookLibrary;
 
-namespace BusinessLogic
+namespace BookLibrary.DAL
 {
     public class DatabaseManagement
     {
-        public object GetBooksToBindingList()
+        public IBindingList GetBooksToBindingList()
         {
             using (var db = new LibraryContext())
             {
@@ -18,7 +19,7 @@ namespace BusinessLogic
             }
         }
 
-        public object GetReadersToBindingList()
+        public IBindingList GetReadersToBindingList()
         {
             using (var db = new LibraryContext())
             {
@@ -42,13 +43,14 @@ namespace BusinessLogic
             }
         }
 
-        public void AddBook(Book b)
+        public void Add(IDatabaseItem b)
         {
-            using (var db = new LibraryContext())
-            {
-                db.Books.Add(b);
-                db.SaveChanges();
-            }
+            b.AddToDatabase(b);
+            //using (var db = new LibraryContext())
+            //{
+            //    db.Books.Add(b);
+            //    db.SaveChanges();
+            //}
         }
 
         public Book GetBook(Book b)
@@ -70,7 +72,7 @@ namespace BusinessLogic
             }
         }
 
-        public void DeleteBook(Book b)
+        public void RemoveBook(Book b)
         {
             using(var db = new LibraryContext())
             {

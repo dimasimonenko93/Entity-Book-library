@@ -100,6 +100,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BookLibrary.Models\BookLibrary.Models.csproj">
+      <Project>{f09c1e6e-9110-46e5-902e-3d910f9f92a4}</Project>
+      <Name>BookLibrary.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BusinessLogic\BookLibrary.BL.csproj">
       <Project>{05cfabe3-0cf6-4712-b7aa-9251b928c603}</Project>
       <Name>BookLibrary.BL</Name>
