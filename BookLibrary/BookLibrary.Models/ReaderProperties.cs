@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary
+namespace BookLibrary.Models
 {
-    public class Reader
+    public class ReaderProperties
     {
         public int    Id          { get; set; }
         public string Name        { get; set; }
@@ -16,7 +16,7 @@ namespace BookLibrary
         public int    PhoneNumber { get; set; }
         public string Mail        { get; set; }
 
-        public List<Book> BooksOnHand  = new List<Book>();
-        public List<Book> BooksHistory = new List<Book>();
+        public List<BookProperties> BooksOnHand  = new List<BookProperties>();
+        public List<BookProperties> BooksHistory = new List<BookProperties>();
     }
 }

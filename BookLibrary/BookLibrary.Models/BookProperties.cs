@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookLibrary
+namespace BookLibrary.Models 
 {
-    public class Book
+    public class BookProperties
     {
         public int    Id              { get; set; }
         public string Name            { get; set; }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BookLibrary;
 using BookLibrary.DAL;
+using BookLibrary.Models;
 
 namespace BusinessLogic
 {
@@ -27,27 +28,6 @@ namespace BusinessLogic
         public IBindingList LoadDataGridViewReaders()
         {
             return databaseManagement.GetReadersToBindingList();
-        }
-
-        public void CreateBook()
-        {
-            var book = new BookDb();
-            databaseManagement.Add(book);
-        }
-
-        public void GetBook(Book b)
-        {
-            databaseManagement.GetBook(b);
-        }
-
-        public void EditBook(Book b)
-        {
-            databaseManagement.EditBook(b);
-        }
-
-        public void RemoveBook(Book b)
-        {
-            databaseManagement.RemoveBook(b);
         }
     }
 }

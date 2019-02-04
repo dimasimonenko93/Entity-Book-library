@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,7 +23,7 @@ namespace BookLibrary
 
         private void CreateLabels() // Test version
         {
-            Book b = new Book();
+            BookProperties b = new BookProperties();
             Point tempLocation = new Point(0, 0);
 
             PropertyInfo[] properties = b.GetType().GetProperties(); 
