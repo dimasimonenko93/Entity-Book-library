@@ -9,34 +9,54 @@ namespace BookLibrary.DAL
 {
     public class Book : IModels<BookProperties>
     {
-        public void Create(BookProperties item)
+        public void Create(BookProperties book)
         {
-            throw new NotImplementedException();
+            using (var db = new LibraryContext())
+            {
+                db.Books.Add(book);
+            }
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (var db = new LibraryContext())
+            {
+                BookProperties book = db.Books.Find(id);
+                if (book != null)
+                    db.Books.Remove(book);
+            }
         }
 
         public IEnumerable<BookProperties> Find(Func<BookProperties, bool> predicate)
         {
-            throw new NotImplementedException();
+            using (var db = new LibraryContext())
+            {
+                return db.Books.Where(predicate).ToList();
+            }
         }
 
         public BookProperties Get(int id)
         {
-            throw new NotImplementedException();
+            using (var db = new LibraryContext())
+            {
+                return db.Books.Find(id);
+            }
         }
 
         public IEnumerable<BookProperties> GetAll()
         {
-            throw new NotImplementedException();
+            using (var db = new LibraryContext())
+            {
+                return db.Books;
+            }
         }
 
-        public void Update(BookProperties item)
+        public void Update(BookProperties book)
         {
-            throw new NotImplementedException();
+            using (var db = new LibraryContext())
+            {
+                db.Entry(book).State = System.Data.Entity.EntityState.Modified;
+            }
         }
     }
 }
