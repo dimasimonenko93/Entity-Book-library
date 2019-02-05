@@ -12,6 +12,8 @@ namespace BookLibrary.DAL
 {
     public class DatabaseManagement
     {
+        public Book book = new Book();
+
         public IBindingList GetBooksToBindingList()
         {
             using (var db = new LibraryContext())

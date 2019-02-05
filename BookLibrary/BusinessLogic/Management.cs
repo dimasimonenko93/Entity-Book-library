@@ -29,5 +29,36 @@ namespace BusinessLogic
         {
             return databaseManagement.GetReadersToBindingList();
         }
+
+        public void CreateBook(BookProperties book)
+        {
+            databaseManagement.book.Create(book);
+        }
+
+        public void DeleteBook(int id)
+        {
+            databaseManagement.book.Delete(id);
+        }
+
+        public IEnumerable<BookProperties> FindBook(Func<BookProperties, bool> predicate)
+        {
+            return databaseManagement.book.Find(predicate);
+        }
+
+        public BookProperties GetBook(int id)
+        {
+            return databaseManagement.book.Get(id);
+        }
+
+        public IEnumerable<BookProperties> GetAllBooks()
+        {
+            return databaseManagement.book.GetAll();
+        }
+
+        public void Update(BookProperties book)
+        {
+            databaseManagement.book.Update(book);
+        }
+
     }
 }
