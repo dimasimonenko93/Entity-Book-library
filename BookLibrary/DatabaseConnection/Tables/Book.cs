@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.DAL
 {
-    public class Book : IModels<BookProperties>
+    public class Book : IMethods<BookProperties>
     {
         public void Create(BookProperties book)
         {

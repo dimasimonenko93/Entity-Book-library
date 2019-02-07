@@ -35,9 +35,9 @@ namespace BookLibrary
 
         private void btnAdd_Click(object sender, EventArgs e)
         {
-           var add = new FormTemplate();
+           var add = new FormTemplate(tabControl.SelectedIndex);
            add.Text = tabControl.SelectedTab.Name;
-           
+
            DialogResult result = add.ShowDialog(this);
            if (result == DialogResult.Cancel)
                return;
@@ -45,7 +45,7 @@ namespace BookLibrary
 
         private void btnEdit_Click(object sender, EventArgs e)
         {
-            var edit = new FormTemplate();
+            var edit = new FormTemplate(tabControl.SelectedIndex);
             edit.Text = tabControl.SelectedTab.Name;
 
             DialogResult result = edit.ShowDialog(this);

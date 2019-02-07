@@ -14,23 +14,33 @@ namespace BookLibrary
 {
     public partial class FormTemplate : Form
     {
-        public FormTemplate()
+        public FormTemplate(int selectedIndex)
         {
             InitializeComponent();
-
-            CreateLabels();
+            
+            CreateLabels(selectedIndex);
         }
 
-        private void CreateLabels() // Test version
+        private void CreateLabels(int selectedIndex) // Test version
         {
-            BookProperties b = new BookProperties();
-            Point tempLocation = new Point(0, 0);
-
-            PropertyInfo[] properties = b.GetType().GetProperties(); 
+            PropertyInfo[] properties;
 
             //The GetProperties() method does not return properties in a particular order, 
             //such as alphabetical or declaration order. Your code must not depend on the 
             //order in which properties are returned, because that order varies.
+
+            if (selectedIndex == 0)
+            {
+                BookProperties book = new BookProperties();
+                properties = book.GetType().GetProperties();
+            }
+            else
+            {
+                ReaderProperties reader = new ReaderProperties();
+                properties = reader.GetType().GetProperties();
+            }
+
+            Point tempLocation = new Point(0, 0);
 
             foreach (PropertyInfo propertyInfo in properties)
             {

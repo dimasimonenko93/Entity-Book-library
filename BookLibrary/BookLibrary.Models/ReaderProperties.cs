@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.Models
 {
-    public class ReaderProperties
+    public class ReaderProperties : IModel
     {
         public int    Id          { get; set; }
         public string Name        { get; set; }

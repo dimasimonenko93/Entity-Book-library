@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.Models
 {
-    public interface IModels<T> where T : class
+    public interface IMethods<T> where T : class
     {
         IEnumerable<T> GetAll();
         T Get(int id);
