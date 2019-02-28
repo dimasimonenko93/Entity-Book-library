@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -48,11 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Tables\Book.cs" />
-    <Compile Include="DatabaseManagement.cs" />
+    <Compile Include="EntitiesBase.cs" />
+    <Compile Include="Tables\BookRepository.cs" />
     <Compile Include="LibraryContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tables\Reader.cs" />
+    <Compile Include="Tables\ReaderRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

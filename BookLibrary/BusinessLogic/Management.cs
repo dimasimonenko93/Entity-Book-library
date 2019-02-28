@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Data.Common;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using BookLibrary;
@@ -13,52 +17,37 @@ namespace BusinessLogic
 {
     public class Management
     {
-        DatabaseManagement databaseManagement;
+        public DataTable books = new DataTable();
+
+        private EntitiesBase dataBase;
 
         public Management()
         {
-            databaseManagement = new DatabaseManagement();
+            dataBase = new EntitiesBase();
+
+            FillTableBook();
         }
 
-        public IBindingList LoadDataGridViewBooks()
+        private void FillTableBook()
         {
-            return databaseManagement.GetBooksToBindingList();
+            books = ConvertToDataTable(dataBase.books.GetAll());
         }
 
-        public IBindingList LoadDataGridViewReaders()
+        private DataTable ConvertToDataTable<T>(IList<T> data)
         {
-            return databaseManagement.GetReadersToBindingList();
+            PropertyDescriptorCollection properties =
+               TypeDescriptor.GetProperties(typeof(T));
+            DataTable table = new DataTable();
+            foreach (PropertyDescriptor prop in properties)
+                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
+            foreach (T item in data)
+            {
+                DataRow row = table.NewRow();
+                foreach (PropertyDescriptor prop in properties)
+                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
+                table.Rows.Add(row);
+            }
+            return table;
         }
-
-        public void CreateBook(BookProperties book)
-        {
-            databaseManagement.book.Create(book);
-        }
-
-        public void DeleteBook(int id)
-        {
-            databaseManagement.book.Delete(id);
-        }
-
-        public IEnumerable<BookProperties> FindBook(Func<BookProperties, bool> predicate)
-        {
-            return databaseManagement.book.Find(predicate);
-        }
-
-        public BookProperties GetBook(int id)
-        {
-            return databaseManagement.book.Get(id);
-        }
-
-        public IEnumerable<BookProperties> GetAllBooks()
-        {
-            return databaseManagement.book.GetAll();
-        }
-
-        public void Update(BookProperties book)
-        {
-            databaseManagement.book.Update(book);
-        }
-
     }
 }

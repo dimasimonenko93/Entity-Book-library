@@ -22,15 +22,9 @@ namespace BookLibrary
 
             management = new Management();
 
-            dataGridViewBooks.DataSource = management.LoadDataGridViewBooks();
+            dataGridViewBooks.DataSource = management.books;
 
-            dataGridViewReaders.DataSource = management.LoadDataGridViewReaders();
-        }
-
-        private void tbSearchBooks_Enter(object sender, EventArgs e)
-        {
-            tbSearchBooks.Clear();
-            tbSearchBooks.ForeColor = Color.Black;
+            //dataGridViewReaders.DataSource = management.dataSet.Tables[1];
         }
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -51,6 +45,27 @@ namespace BookLibrary
             DialogResult result = edit.ShowDialog(this);
             if (result == DialogResult.Cancel)
                 return;
+        }
+
+        private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
+        {
+            tbSearchBooks.Clear();
+            tbSearchBooks.ForeColor = Color.Black;
+        }
+
+        private void tbSearchBooks_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+            {
+                try
+                {
+                    dataGridViewBooks.DataSource = management.books.Select(tbSearchBooks.Text); // Is Name of Columns saved ?
+                }
+                catch
+                {
+                    MessageBox.Show(this, "Books not found");
+                }
+            }
         }
     }
 }
