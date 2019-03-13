@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Data.Common;
-using System.Data.Entity;
-using System.Data.SqlClient;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using BookLibrary;
 using BookLibrary.DAL;
 using BookLibrary.Models;
 
@@ -17,37 +10,57 @@ namespace BusinessLogic
 {
     public class Management
     {
-        public DataTable books = new DataTable();
+        private List<BookProperties> books;
+        public List<ReaderProperties> readers;
 
         private EntitiesBase dataBase;
-
+        
         public Management()
         {
             dataBase = new EntitiesBase();
 
-            FillTableBook();
+            books = dataBase.books.GetAll();
+            readers = dataBase.readers.GetAll();
         }
 
-        private void FillTableBook()
+        public BookProperties GetBook(int id)
         {
-            books = ConvertToDataTable(dataBase.books.GetAll());
+            return dataBase.books.Get(id);
         }
 
-        private DataTable ConvertToDataTable<T>(IList<T> data)
+        public List<BookProperties> GetAllBooks()
         {
-            PropertyDescriptorCollection properties =
-               TypeDescriptor.GetProperties(typeof(T));
-            DataTable table = new DataTable();
-            foreach (PropertyDescriptor prop in properties)
-                table.Columns.Add(prop.Name, Nullable.GetUnderlyingType(prop.PropertyType) ?? prop.PropertyType);
-            foreach (T item in data)
+            return dataBase.books.GetAll();
+        }
+
+        public void CreatBook(BookProperties b)
+        {
+            dataBase.books.Create(b);
+            books.Add(b);
+        }
+
+        public void EditBook(BookProperties b)
+        {
+            dataBase.books.Update(b);
+        }
+
+        public void DeleteBook(int bookId)
+        {
+            dataBase.books.Delete(bookId);
+        }
+
+        public BookProperties SetBookValue(BookProperties book, string nameOfProperty, object value)
+        {
+            PropertyInfo[] properties = book.GetType().GetProperties();
+
+            foreach (PropertyInfo propertyInfo in properties)
             {
-                DataRow row = table.NewRow();
-                foreach (PropertyDescriptor prop in properties)
-                    row[prop.Name] = prop.GetValue(item) ?? DBNull.Value;
-                table.Rows.Add(row);
+                if(propertyInfo.Name == nameOfProperty)
+                {
+                    propertyInfo.SetValue(book, value);
+                }
             }
-            return table;
+            return book;
         }
     }
 }

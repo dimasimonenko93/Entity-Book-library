@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Entity;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using BookLibrary.Models;
 using BusinessLogic;
 
 namespace BookLibrary
@@ -22,29 +16,8 @@ namespace BookLibrary
 
             management = new Management();
 
-            dataGridViewBooks.DataSource = management.books;
-
-            //dataGridViewReaders.DataSource = management.dataSet.Tables[1];
-        }
-
-        private void btnAdd_Click(object sender, EventArgs e)
-        {
-           var add = new FormTemplate(tabControl.SelectedIndex);
-           add.Text = tabControl.SelectedTab.Name;
-
-           DialogResult result = add.ShowDialog(this);
-           if (result == DialogResult.Cancel)
-               return;
-        }
-
-        private void btnEdit_Click(object sender, EventArgs e)
-        {
-            var edit = new FormTemplate(tabControl.SelectedIndex);
-            edit.Text = tabControl.SelectedTab.Name;
-
-            DialogResult result = edit.ShowDialog(this);
-            if (result == DialogResult.Cancel)
-                return;
+            dataGridViewBooks.DataSource = management.GetAllBooks();
+            dataGridViewReaders.DataSource = management.readers;
         }
 
         private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
@@ -59,13 +32,50 @@ namespace BookLibrary
             {
                 try
                 {
-                    dataGridViewBooks.DataSource = management.books.Select(tbSearchBooks.Text); // Is Name of Columns saved ?
+
                 }
                 catch
                 {
                     MessageBox.Show(this, "Books not found");
                 }
             }
+        }
+
+        private void dataGridViewBooks_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if(e.RowIndex + 1 == management.GetAllBooks().Count)
+            {
+                BookProperties book = new BookProperties();
+                management.CreatBook(book);
+
+                dataGridViewBooks.DataSource = null;
+                dataGridViewBooks.DataSource = management.GetAllBooks();
+                dataGridViewBooks.CurrentCell = dataGridViewBooks.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            }
+        }
+
+        private void dataGridViewBooks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            int bookId = Convert.ToInt32(dataGridViewBooks[0, e.RowIndex].Value);
+            string columnName = dataGridViewBooks.Columns[e.ColumnIndex].Name;
+            var value = dataGridViewBooks.CurrentCell.Value;
+
+            var b = management.GetBook(bookId);
+            b = management.SetBookValue(b, columnName, value);
+
+            management.EditBook(b);
+        }
+
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            if(dataGridViewBooks.SelectedRows.Count > 0)
+            {
+                foreach(DataGridViewRow rows in dataGridViewBooks.SelectedRows)
+                {
+                    management.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
+                }
+            }
+            dataGridViewBooks.DataSource = management.GetAllBooks();
         }
     }
 }

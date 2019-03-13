@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data.Entity;
+﻿using System.Data.Entity;
 using BookLibrary.Models;
 
 namespace BookLibrary
 {
-    internal class LibraryContext : DbContext
+    public class LibraryContext : DbContext
     {
         public LibraryContext() : base("DbConnection")
         {

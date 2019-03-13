@@ -35,9 +35,7 @@
             this.dataGridViewReaders = new System.Windows.Forms.DataGridView();
             this.panelForButtons = new System.Windows.Forms.Panel();
             this.tbSearchBooks = new System.Windows.Forms.TextBox();
-            this.btnEdit = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
-            this.btnAdd = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.Books.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBooks)).BeginInit();
@@ -78,6 +76,8 @@
             this.dataGridViewBooks.Name = "dataGridViewBooks";
             this.dataGridViewBooks.Size = new System.Drawing.Size(1199, 445);
             this.dataGridViewBooks.TabIndex = 0;
+            this.dataGridViewBooks.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewBooks_CellBeginEdit);
+            this.dataGridViewBooks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBooks_CellEndEdit);
             // 
             // Readers
             // 
@@ -101,9 +101,7 @@
             // panelForButtons
             // 
             this.panelForButtons.Controls.Add(this.tbSearchBooks);
-            this.panelForButtons.Controls.Add(this.btnEdit);
             this.panelForButtons.Controls.Add(this.btnRemove);
-            this.panelForButtons.Controls.Add(this.btnAdd);
             this.panelForButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelForButtons.Location = new System.Drawing.Point(0, 499);
             this.panelForButtons.Name = "panelForButtons";
@@ -123,17 +121,6 @@
             this.tbSearchBooks.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tbSearchBooks_MouseClick);
             this.tbSearchBooks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchBooks_KeyDown);
             // 
-            // btnEdit
-            // 
-            this.btnEdit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnEdit.Location = new System.Drawing.Point(917, 28);
-            this.btnEdit.Name = "btnEdit";
-            this.btnEdit.Size = new System.Drawing.Size(136, 46);
-            this.btnEdit.TabIndex = 2;
-            this.btnEdit.Text = "Edit";
-            this.btnEdit.UseVisualStyleBackColor = true;
-            this.btnEdit.Click += new System.EventHandler(this.btnEdit_Click);
-            // 
             // btnRemove
             // 
             this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -143,17 +130,7 @@
             this.btnRemove.TabIndex = 1;
             this.btnRemove.Text = "Remove";
             this.btnRemove.UseVisualStyleBackColor = true;
-            // 
-            // btnAdd
-            // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.Location = new System.Drawing.Point(775, 28);
-            this.btnAdd.Name = "btnAdd";
-            this.btnAdd.Size = new System.Drawing.Size(136, 46);
-            this.btnAdd.TabIndex = 0;
-            this.btnAdd.Text = "Add";
-            this.btnAdd.UseVisualStyleBackColor = true;
-            this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // MainForm
             // 
@@ -181,9 +158,7 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.Panel panelForButtons;
         private System.Windows.Forms.TextBox tbSearchBooks;
-        private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnRemove;
-        private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.TabPage Books;
         private System.Windows.Forms.DataGridView dataGridViewBooks;
         private System.Windows.Forms.TabPage Readers;
