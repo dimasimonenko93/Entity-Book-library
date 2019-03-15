@@ -10,57 +10,96 @@ namespace BusinessLogic
 {
     public class Management
     {
-        private List<BookProperties> books;
-        public List<ReaderProperties> readers;
-
         private EntitiesBase dataBase;
         
         public Management()
         {
             dataBase = new EntitiesBase();
-
-            books = dataBase.books.GetAll();
-            readers = dataBase.readers.GetAll();
         }
 
-        public BookProperties GetBook(int id)
-        {
-            return dataBase.books.Get(id);
-        }
+        //public BookProperties GetBook(int bookId)
+        //{
+        //    return dataBase.books.Get(bookId);
+        //}
+
+        //public ReaderProperties GetReader(int readerId)
+        //{
+        //    return dataBase.readers.Get(readerId);
+        //}
 
         public List<BookProperties> GetAllBooks()
         {
             return dataBase.books.GetAll();
         }
 
-        public void CreatBook(BookProperties b)
+        public List<ReaderProperties> GetAllReaders()
         {
-            dataBase.books.Create(b);
-            books.Add(b);
+            return dataBase.readers.GetAll();
         }
 
-        public void EditBook(BookProperties b)
+        public void CreateBook(BookProperties book)
         {
-            dataBase.books.Update(b);
+            dataBase.books.Create(book);
         }
+
+        public void CreateReader(ReaderProperties reader)
+        {
+            dataBase.readers.Create(reader);
+        }
+
+        //public void EditBook(BookProperties book)
+        //{
+        //    dataBase.books.Update(book);
+        //}
+
+        //public void EditReader(ReaderProperties reader)
+        //{
+        //    dataBase.readers.Update(reader);
+        //}
 
         public void DeleteBook(int bookId)
         {
             dataBase.books.Delete(bookId);
         }
 
-        public BookProperties SetBookValue(BookProperties book, string nameOfProperty, object value)
+        public void DeleteReader(int readerId)
+        {
+            dataBase.readers.Delete(readerId);
+        }
+
+        public void SetBookValue(BookProperties book, string nameOfProperty, object value)
         {
             PropertyInfo[] properties = book.GetType().GetProperties();
 
+            FindProperty(properties, nameOfProperty).SetValue(book, value);
+
+            dataBase.books.Update(book);
+        }
+
+        public ReaderProperties SetReaderValue(ReaderProperties reader, string nameOfProperty, object value)
+        {
+            PropertyInfo[] properties = reader.GetType().GetProperties();
+
             foreach (PropertyInfo propertyInfo in properties)
             {
-                if(propertyInfo.Name == nameOfProperty)
+                if (propertyInfo.Name == nameOfProperty)
                 {
-                    propertyInfo.SetValue(book, value);
+                    propertyInfo.SetValue(reader, value);
                 }
             }
-            return book;
+            return reader;
+        }
+
+        private PropertyInfo FindProperty(PropertyInfo[] properties, string nameOfProperty)
+        {
+            foreach(PropertyInfo propertyInfo in properties)
+            {
+                if (propertyInfo.Name == nameOfProperty)
+                {
+                    return propertyInfo;
+                }
+            }
+            return null;
         }
     }
 }

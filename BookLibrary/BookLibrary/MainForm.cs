@@ -17,7 +17,8 @@ namespace BookLibrary
             management = new Management();
 
             dataGridViewBooks.DataSource = management.GetAllBooks();
-            dataGridViewReaders.DataSource = management.readers;
+            dataGridViewReaders.DataSource = management.GetAllReaders();
+
         }
 
         private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
@@ -46,9 +47,8 @@ namespace BookLibrary
             if(e.RowIndex + 1 == management.GetAllBooks().Count)
             {
                 BookProperties book = new BookProperties();
-                management.CreatBook(book);
+                management.CreateBook(book);
 
-                dataGridViewBooks.DataSource = null;
                 dataGridViewBooks.DataSource = management.GetAllBooks();
                 dataGridViewBooks.CurrentCell = dataGridViewBooks.Rows[e.RowIndex].Cells[e.ColumnIndex];
             }
@@ -60,10 +60,10 @@ namespace BookLibrary
             string columnName = dataGridViewBooks.Columns[e.ColumnIndex].Name;
             var value = dataGridViewBooks.CurrentCell.Value;
 
-            var b = management.GetBook(bookId);
-            b = management.SetBookValue(b, columnName, value);
+            //var b = management.GetBook(bookId);
+            //b = management.SetBookValue(b, columnName, value);
 
-            management.EditBook(b);
+            //management.EditBook(b);
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
