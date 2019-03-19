@@ -11,10 +11,14 @@ namespace BusinessLogic
     public class Management
     {
         private EntitiesBase dataBase;
+
+        public List<BookProperties> books;
         
         public Management()
         {
             dataBase = new EntitiesBase();
+
+            books = GetAllBooks();
         }
 
         //public BookProperties GetBook(int bookId)
@@ -67,8 +71,10 @@ namespace BusinessLogic
             dataBase.readers.Delete(readerId);
         }
 
-        public void SetBookValue(BookProperties book, string nameOfProperty, object value)
+        public void SetBookValue(int bookId, string nameOfProperty, object value)
         {
+            BookProperties book = dataBase.books.Get(bookId);
+
             PropertyInfo[] properties = book.GetType().GetProperties();
 
             FindProperty(properties, nameOfProperty).SetValue(book, value);

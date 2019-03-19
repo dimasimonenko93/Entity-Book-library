@@ -10,15 +10,17 @@ namespace BookLibrary
     {
         Management management;
 
+        DataGridView dataGridViewBooks;
+        DataGridView dataGridViewReaders;
+
         public MainForm()
         {
             InitializeComponent();
 
             management = new Management();
 
-            dataGridViewBooks.DataSource = management.GetAllBooks();
-            dataGridViewReaders.DataSource = management.GetAllReaders();
-
+            dataGridViewBooks = CreateNewDataGridViewTab("Books");
+            dataGridViewReaders = CreateNewDataGridViewTab("Readers");
         }
 
         private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
@@ -60,10 +62,7 @@ namespace BookLibrary
             string columnName = dataGridViewBooks.Columns[e.ColumnIndex].Name;
             var value = dataGridViewBooks.CurrentCell.Value;
 
-            //var b = management.GetBook(bookId);
-            //b = management.SetBookValue(b, columnName, value);
-
-            //management.EditBook(b);
+            management.SetBookValue(bookId, columnName, value);
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
@@ -76,6 +75,24 @@ namespace BookLibrary
                 }
             }
             dataGridViewBooks.DataSource = management.GetAllBooks();
+        }
+
+        private DataGridView CreateNewDataGridViewTab(string TabName)
+        {
+            TabPage tp = new TabPage(TabName);
+            tp.Name = TabName;
+
+            tabControl.TabPages.Add(tp);
+
+            DataGridView dataGridView = new DataGridView()
+            {
+                Name = TabName,
+                Dock = DockStyle.Fill,
+            };
+
+            tabControl.TabPages[TabName].Controls.Add(dataGridView);
+
+            return dataGridView;
         }
     }
 }

@@ -28,75 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.Books = new System.Windows.Forms.TabPage();
-            this.dataGridViewBooks = new System.Windows.Forms.DataGridView();
-            this.Readers = new System.Windows.Forms.TabPage();
-            this.dataGridViewReaders = new System.Windows.Forms.DataGridView();
             this.panelForButtons = new System.Windows.Forms.Panel();
             this.tbSearchBooks = new System.Windows.Forms.TextBox();
             this.btnRemove = new System.Windows.Forms.Button();
-            this.tabControl.SuspendLayout();
-            this.Books.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBooks)).BeginInit();
-            this.Readers.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReaders)).BeginInit();
+            this.tabControl = new System.Windows.Forms.TabControl();
             this.panelForButtons.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // tabControl
-            // 
-            this.tabControl.Controls.Add(this.Books);
-            this.tabControl.Controls.Add(this.Readers);
-            this.tabControl.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tabControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.tabControl.ItemSize = new System.Drawing.Size(42, 18);
-            this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(0);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1207, 471);
-            this.tabControl.TabIndex = 0;
-            // 
-            // Books
-            // 
-            this.Books.Controls.Add(this.dataGridViewBooks);
-            this.Books.Location = new System.Drawing.Point(4, 22);
-            this.Books.Name = "Books";
-            this.Books.Size = new System.Drawing.Size(1199, 445);
-            this.Books.TabIndex = 0;
-            this.Books.Text = "Books";
-            this.Books.UseVisualStyleBackColor = true;
-            // 
-            // dataGridViewBooks
-            // 
-            this.dataGridViewBooks.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewBooks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewBooks.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewBooks.Name = "dataGridViewBooks";
-            this.dataGridViewBooks.Size = new System.Drawing.Size(1199, 445);
-            this.dataGridViewBooks.TabIndex = 0;
-            this.dataGridViewBooks.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.dataGridViewBooks_CellBeginEdit);
-            this.dataGridViewBooks.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBooks_CellEndEdit);
-            // 
-            // Readers
-            // 
-            this.Readers.Controls.Add(this.dataGridViewReaders);
-            this.Readers.Location = new System.Drawing.Point(4, 22);
-            this.Readers.Name = "Readers";
-            this.Readers.Size = new System.Drawing.Size(1199, 445);
-            this.Readers.TabIndex = 1;
-            this.Readers.Text = "Readers";
-            this.Readers.UseVisualStyleBackColor = true;
-            // 
-            // dataGridViewReaders
-            // 
-            this.dataGridViewReaders.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewReaders.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewReaders.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewReaders.Name = "dataGridViewReaders";
-            this.dataGridViewReaders.Size = new System.Drawing.Size(1199, 445);
-            this.dataGridViewReaders.TabIndex = 1;
             // 
             // panelForButtons
             // 
@@ -132,6 +69,18 @@
             this.btnRemove.UseVisualStyleBackColor = true;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
+            // tabControl
+            // 
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tabControl.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.tabControl.ItemSize = new System.Drawing.Size(42, 18);
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(1207, 471);
+            this.tabControl.TabIndex = 0;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -142,11 +91,6 @@
             this.MinimumSize = new System.Drawing.Size(900, 600);
             this.Name = "MainForm";
             this.Text = "Book Library";
-            this.tabControl.ResumeLayout(false);
-            this.Books.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBooks)).EndInit();
-            this.Readers.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewReaders)).EndInit();
             this.panelForButtons.ResumeLayout(false);
             this.panelForButtons.PerformLayout();
             this.ResumeLayout(false);
@@ -154,15 +98,10 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.Panel panelForButtons;
         private System.Windows.Forms.TextBox tbSearchBooks;
         private System.Windows.Forms.Button btnRemove;
-        private System.Windows.Forms.TabPage Books;
-        private System.Windows.Forms.DataGridView dataGridViewBooks;
-        private System.Windows.Forms.TabPage Readers;
-        private System.Windows.Forms.DataGridView dataGridViewReaders;
+        private System.Windows.Forms.TabControl tabControl;
     }
 }
 
