@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using BookLibrary.Models;
 using BusinessLogic;
@@ -20,7 +22,11 @@ namespace BookLibrary
             management = new Management();
 
             dataGridViewBooks = CreateNewDataGridViewTab("Books");
+            AddColumns(dataGridViewBooks, typeof(BookProperties).GetProperties());
+            AddRowsToDgvBooks();
+
             dataGridViewReaders = CreateNewDataGridViewTab("Readers");
+            AddColumns(dataGridViewReaders, typeof(ReaderProperties).GetProperties());
         }
 
         private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
@@ -93,6 +99,31 @@ namespace BookLibrary
             tabControl.TabPages[TabName].Controls.Add(dataGridView);
 
             return dataGridView;
+        }
+
+        private void AddColumns(DataGridView dgv, PropertyInfo[] properties)
+        {
+            foreach(var p in properties)
+            {
+                dgv.Columns.Add(p.Name, p.Name);
+            }
+        }
+
+        private void AddRowsToDgvBooks()
+        {
+            foreach (var item in management.GetAllBooks())
+            {
+                var properties = item.GetType().GetProperties();
+                var row = new DataGridViewRow();
+
+                foreach(var p in properties)
+                {
+                    var cell = new DataGridViewTextBoxCell();
+                    cell.Value = p.GetValue(item);
+                    row.Cells.Add(cell);
+                }
+                dataGridViewBooks.Rows.Add(row);
+            }
         }
     }
 }
