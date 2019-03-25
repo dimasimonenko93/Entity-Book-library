@@ -12,8 +12,16 @@ namespace BookLibrary
     {
         Management management;
 
+        DataGridView tempDataGridView;
+
         DataGridView dataGridViewBooks;
         DataGridView dataGridViewReaders;
+
+        delegate int BeginEdit();
+        delegate void EndEdit(int Id, string columnName, object cellValue);
+
+        BeginEdit ReturnNewObjectIdFromDB;
+        EndEdit SetValue;
 
         public MainForm()
         {
@@ -22,11 +30,11 @@ namespace BookLibrary
             management = new Management();
 
             dataGridViewBooks = CreateNewDataGridViewTab("Books");
-            AddColumns(dataGridViewBooks, typeof(BookProperties).GetProperties());
             AddRowsToDgvBooks();
 
-            dataGridViewReaders = CreateNewDataGridViewTab("Readers");
-            AddColumns(dataGridViewReaders, typeof(ReaderProperties).GetProperties());
+            //dataGridViewReaders = CreateNewDataGridViewTab("Readers");
+
+            SetDelegates();
         }
 
         private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
@@ -50,37 +58,48 @@ namespace BookLibrary
             }
         }
 
-        private void dataGridViewBooks_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        private void dataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            if(e.RowIndex + 1 == management.GetAllBooks().Count)
-            {
-                BookProperties book = new BookProperties();
-                management.CreateBook(book);
+            var dataGrid = (DataGridView)sender;
 
-                dataGridViewBooks.DataSource = management.GetAllBooks();
-                dataGridViewBooks.CurrentCell = dataGridViewBooks.Rows[e.RowIndex].Cells[e.ColumnIndex];
+            if(dataGrid.CurrentRow.Cells[0].Value == null)
+            {
+                //var book = new BookProperties();
+                //management.CreateBook(book);
+                //dataGrid.CurrentRow.Cells[0].Value = book.Id;
+                dataGrid.CurrentRow.Cells[0].Value = ReturnNewObjectIdFromDB();
             }
         }
 
         private void dataGridViewBooks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            int bookId = Convert.ToInt32(dataGridViewBooks[0, e.RowIndex].Value);
-            string columnName = dataGridViewBooks.Columns[e.ColumnIndex].Name;
-            var value = dataGridViewBooks.CurrentCell.Value;
+            var dataGrid = (DataGridView)sender;
 
-            management.SetBookValue(bookId, columnName, value);
+            int Id = Convert.ToInt32(dataGrid[0, e.RowIndex].Value);
+            string columnName = dataGrid.Columns[e.ColumnIndex].Name;
+            var cellValue = dataGrid.CurrentCell.Value;
+
+            //management.SetBookValue(bookId, columnName, value);
+            SetValue(Id, columnName, cellValue);
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if(dataGridViewBooks.SelectedRows.Count > 0)
+            if(tempDataGridView.SelectedRows.Count > 0)
             {
-                foreach(DataGridViewRow rows in dataGridViewBooks.SelectedRows)
+                foreach(DataGridViewRow rows in tempDataGridView.SelectedRows)
                 {
                     management.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
+                    try
+                    {
+                        tempDataGridView.Rows.Remove(rows);
+                    }
+                    catch
+                    {
+
+                    }
                 }
             }
-            dataGridViewBooks.DataSource = management.GetAllBooks();
         }
 
         private DataGridView CreateNewDataGridViewTab(string TabName)
@@ -95,6 +114,9 @@ namespace BookLibrary
                 Name = TabName,
                 Dock = DockStyle.Fill,
             };
+            dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
+            dataGridView.CellEndEdit += dataGridViewBooks_CellEndEdit;
+            AddColumns(dataGridView, typeof(BookProperties).GetProperties());
 
             tabControl.TabPages[TabName].Controls.Add(dataGridView);
 
@@ -123,6 +145,28 @@ namespace BookLibrary
                     row.Cells.Add(cell);
                 }
                 dataGridViewBooks.Rows.Add(row);
+            }
+        }
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetDelegates();
+        }
+
+        private void SetDelegates()
+        {
+            if(tabControl.SelectedTab.Name == dataGridViewBooks.Name)
+            {
+                tempDataGridView = dataGridViewBooks;
+
+                ReturnNewObjectIdFromDB = () =>
+                {
+                    var book = new BookProperties();
+                    management.CreateBook(book);
+                    return book.Id;
+                };
+
+                SetValue = management.SetBookValue;
             }
         }
     }
