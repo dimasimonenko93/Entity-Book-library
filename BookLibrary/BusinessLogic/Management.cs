@@ -12,13 +12,9 @@ namespace BusinessLogic
     {
         private EntitiesBase dataBase;
 
-        public List<BookProperties> books;
-        
         public Management()
         {
             dataBase = new EntitiesBase();
-
-            books = GetAllBooks();
         }
 
         //public BookProperties GetBook(int bookId)
@@ -82,18 +78,15 @@ namespace BusinessLogic
             dataBase.books.Update(book);
         }
 
-        public ReaderProperties SetReaderValue(ReaderProperties reader, string nameOfProperty, object value)
+        public void SetReaderValue(int readerkId, string nameOfProperty, object value)
         {
+            ReaderProperties reader = dataBase.readers.Get(readerkId);
+
             PropertyInfo[] properties = reader.GetType().GetProperties();
 
-            foreach (PropertyInfo propertyInfo in properties)
-            {
-                if (propertyInfo.Name == nameOfProperty)
-                {
-                    propertyInfo.SetValue(reader, value);
-                }
-            }
-            return reader;
+            FindProperty(properties, nameOfProperty).SetValue(reader, value);
+
+            dataBase.readers.Update(reader);
         }
 
         private PropertyInfo FindProperty(PropertyInfo[] properties, string nameOfProperty)
