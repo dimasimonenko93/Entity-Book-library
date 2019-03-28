@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.panelForButtons = new System.Windows.Forms.Panel();
-            this.tbSearchBooks = new System.Windows.Forms.TextBox();
+            this.tbSearch = new System.Windows.Forms.TextBox();
             this.btnRemove = new System.Windows.Forms.Button();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.panelForButtons.SuspendLayout();
@@ -37,7 +37,7 @@
             // 
             // panelForButtons
             // 
-            this.panelForButtons.Controls.Add(this.tbSearchBooks);
+            this.panelForButtons.Controls.Add(this.tbSearch);
             this.panelForButtons.Controls.Add(this.btnRemove);
             this.panelForButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panelForButtons.Location = new System.Drawing.Point(0, 499);
@@ -45,18 +45,18 @@
             this.panelForButtons.Size = new System.Drawing.Size(1207, 86);
             this.panelForButtons.TabIndex = 3;
             // 
-            // tbSearchBooks
+            // tbSearch
             // 
-            this.tbSearchBooks.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.tbSearchBooks.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.tbSearchBooks.ForeColor = System.Drawing.SystemColors.WindowFrame;
-            this.tbSearchBooks.Location = new System.Drawing.Point(12, 37);
-            this.tbSearchBooks.Name = "tbSearchBooks";
-            this.tbSearchBooks.Size = new System.Drawing.Size(348, 29);
-            this.tbSearchBooks.TabIndex = 3;
-            this.tbSearchBooks.Text = "To search in books or in their properties...";
-            this.tbSearchBooks.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tbSearchBooks_MouseClick);
-            this.tbSearchBooks.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearchBooks_KeyDown);
+            this.tbSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.tbSearch.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.tbSearch.ForeColor = System.Drawing.SystemColors.WindowFrame;
+            this.tbSearch.Location = new System.Drawing.Point(12, 37);
+            this.tbSearch.Name = "tbSearch";
+            this.tbSearch.Size = new System.Drawing.Size(348, 29);
+            this.tbSearch.TabIndex = 3;
+            this.tbSearch.Text = "To search in books or in their properties...";
+            this.tbSearch.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tbSearch_MouseClick);
+            this.tbSearch.KeyDown += new System.Windows.Forms.KeyEventHandler(this.tbSearch_KeyDown);
             // 
             // btnRemove
             // 
@@ -100,7 +100,7 @@
 
         #endregion
         private System.Windows.Forms.Panel panelForButtons;
-        private System.Windows.Forms.TextBox tbSearchBooks;
+        private System.Windows.Forms.TextBox tbSearch;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.TabControl tabControl;
     }

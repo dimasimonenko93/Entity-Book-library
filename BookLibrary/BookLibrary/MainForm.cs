@@ -20,6 +20,7 @@ namespace BookLibrary
         delegate int BeginEdit();
         delegate void EndEdit(int Id, string columnName, object cellValue);
 
+        Action AddRowsDelegate;
         BeginEdit ReturnNewObjectIdFromDB;
         EndEdit SetValue;
 
@@ -36,23 +37,45 @@ namespace BookLibrary
             SetDelegates();
         }
 
-        private void tbSearchBooks_MouseClick(object sender, MouseEventArgs e)
+        private void tbSearch_MouseClick(object sender, MouseEventArgs e)
         {
-            tbSearchBooks.Clear();
-            tbSearchBooks.ForeColor = Color.Black;
+            tbSearch.Clear();
+            tbSearch.ForeColor = Color.Black;
         }
 
-        private void tbSearchBooks_KeyDown(object sender, KeyEventArgs e)
+        private void tbSearch_KeyDown(object sender, KeyEventArgs e) // Search in current DGV, not in GetAll();
         {
             if(e.KeyCode == Keys.Enter)
             {
-                try
+                if(string.IsNullOrWhiteSpace(tbSearch.Text))
                 {
-
+                    tempDataGridView.Rows.Clear();
+                    AddRowsDelegate();
                 }
-                catch
+                else
                 {
-                    MessageBox.Show(this, "Books not found");
+                    for(int i = 0; i < tempDataGridView.RowCount - 1; i++)
+                    {
+                        bool IsRowContains = false;
+                        for(int j = 0; j < tempDataGridView.ColumnCount; j++)
+                        {
+                            if(tempDataGridView.Rows[i].Cells[j].Value != null)
+                            {
+                                if(tempDataGridView.Rows[i].Cells[j].Value.ToString().Contains(tbSearch.Text))
+                                {
+                                    IsRowContains = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(!IsRowContains)
+                        {
+                            DataGridViewRow dgvDelRow = tempDataGridView.Rows[i];
+                            tempDataGridView.Rows.Remove(dgvDelRow);
+                            i--;
+                        }
+                    }
                 }
             }
         }
@@ -167,6 +190,7 @@ namespace BookLibrary
                 };
 
                 SetValue = management.SetBookValue;
+                AddRowsDelegate = () => AddRows(tempDataGridView, management.GetAllBooks());
             }
             else if(tabControl.SelectedTab.Name == dataGridViewReaders.Name)
             {
@@ -180,6 +204,7 @@ namespace BookLibrary
                 };
 
                 SetValue = management.SetReaderValue;
+                AddRowsDelegate = () => AddRows(tempDataGridView,management.GetAllReaders());
             }
         }
     }
