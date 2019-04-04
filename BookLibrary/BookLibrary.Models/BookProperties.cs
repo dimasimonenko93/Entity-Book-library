@@ -1,6 +1,6 @@
 ﻿namespace BookLibrary.Models
 {
-    public class BookProperties
+    public class BookProperties : IItemProperties
     {
         public int    Id              { get; set; }
         public string Name            { get; set; }

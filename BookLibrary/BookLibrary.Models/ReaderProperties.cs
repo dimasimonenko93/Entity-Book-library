@@ -2,7 +2,7 @@
 
 namespace BookLibrary.Models
 {
-    public class ReaderProperties
+    public class ReaderProperties : IItemProperties
     {
         public int    Id          { get; set; }
         public string Name        { get; set; }

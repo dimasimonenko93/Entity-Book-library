@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 using BookLibrary.Models;
@@ -12,17 +13,19 @@ namespace BookLibrary
     {
         Management management;
 
-        DataGridView tempDataGridView;
+        DataGridView currentDataGridView;
 
         DataGridView dataGridViewBooks;
         DataGridView dataGridViewReaders;
 
         delegate int BeginEdit();
         delegate void EndEdit(int Id, string columnName, object cellValue);
+        delegate List<IItemProperties> GetAll();
 
-        Action AddRowsDelegate;
         BeginEdit ReturnNewObjectIdFromDB;
         EndEdit SetValue;
+        GetAll CurrentList;
+        GetAll NewList = () => new List<IItemProperties>();
 
         public MainForm()
         {
@@ -31,8 +34,10 @@ namespace BookLibrary
             management = new Management();
 
             dataGridViewBooks = CreateNewDataGridViewTab("Books", management.GetAllBooks());
+            AddRows(dataGridViewBooks, management.GetAllBooks().ToList<IItemProperties>());
 
             dataGridViewReaders = CreateNewDataGridViewTab("Readers", management.GetAllReaders());
+            AddRows(dataGridViewReaders, management.GetAllReaders().ToList<IItemProperties>());
 
             SetDelegates();
         }
@@ -49,33 +54,30 @@ namespace BookLibrary
             {
                 if(string.IsNullOrWhiteSpace(tbSearch.Text))
                 {
-                    tempDataGridView.Rows.Clear();
-                    AddRowsDelegate();
+                    currentDataGridView.Rows.Clear();
+                    AddRows(currentDataGridView, CurrentList());
                 }
                 else
                 {
-                    for(int i = 0; i < tempDataGridView.RowCount - 1; i++)
+                    currentDataGridView.Rows.Clear();
+
+                    var list = NewList();
+
+                    foreach(var item in CurrentList())
                     {
-                        bool IsRowContains = false;
-                        for(int j = 0; j < tempDataGridView.ColumnCount; j++)
+                        var properties = item.GetType().GetProperties();
+
+                        foreach(var p in properties)
                         {
-                            if(tempDataGridView.Rows[i].Cells[j].Value != null)
+                            if(Convert.ToString(p.GetValue(item)).Contains(tbSearch.Text)) // when tbSearch.Text = "s" - return all
                             {
-                                if(tempDataGridView.Rows[i].Cells[j].Value.ToString().Contains(tbSearch.Text))
-                                {
-                                    IsRowContains = true;
-                                    break;
-                                }
+                                list.Add(item);
+                                break;
                             }
                         }
-
-                        if(!IsRowContains)
-                        {
-                            DataGridViewRow dgvDelRow = tempDataGridView.Rows[i];
-                            tempDataGridView.Rows.Remove(dgvDelRow);
-                            i--;
-                        }
                     }
+
+                    AddRows(currentDataGridView, list);
                 }
             }
         }
@@ -107,14 +109,14 @@ namespace BookLibrary
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if(tempDataGridView.SelectedRows.Count > 0)
+            if(currentDataGridView.SelectedRows.Count > 0)
             {
-                foreach(DataGridViewRow rows in tempDataGridView.SelectedRows)
+                foreach(DataGridViewRow rows in currentDataGridView.SelectedRows)
                 {
                     management.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
                     try
                     {
-                        tempDataGridView.Rows.Remove(rows);
+                        currentDataGridView.Rows.Remove(rows);
                     }
                     catch
                     {
@@ -139,7 +141,7 @@ namespace BookLibrary
             dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
             dataGridView.CellEndEdit += dataGridViewBooks_CellEndEdit;
             AddColumns(dataGridView, typeof(T).GetProperties());
-            AddRows(dataGridView, getAll);
+            //AddRows(dataGridView, getAll);
 
             tabControl.TabPages[TabName].Controls.Add(dataGridView);
 
@@ -154,9 +156,9 @@ namespace BookLibrary
             }
         }
 
-        private void AddRows<T>(DataGridView dgv, List<T> getAll)
+        private void AddRows(DataGridView dgv, List<IItemProperties> getAll)
         {
-            foreach (T item in getAll)
+            foreach(var item in getAll)
             {
                 var properties = item.GetType().GetProperties();
                 var row = new DataGridViewRow();
@@ -180,7 +182,7 @@ namespace BookLibrary
         {
             if(tabControl.SelectedTab.Name == dataGridViewBooks.Name)
             {
-                tempDataGridView = dataGridViewBooks;
+                currentDataGridView = dataGridViewBooks;
 
                 ReturnNewObjectIdFromDB = () =>
                 {
@@ -190,11 +192,11 @@ namespace BookLibrary
                 };
 
                 SetValue = management.SetBookValue;
-                AddRowsDelegate = () => AddRows(tempDataGridView, management.GetAllBooks());
+                CurrentList = () => management.GetAllBooks().ToList<IItemProperties>();
             }
             else if(tabControl.SelectedTab.Name == dataGridViewReaders.Name)
             {
-                tempDataGridView = dataGridViewReaders;
+                currentDataGridView = dataGridViewReaders;
 
                 ReturnNewObjectIdFromDB = () =>
                 {
@@ -204,7 +206,7 @@ namespace BookLibrary
                 };
 
                 SetValue = management.SetReaderValue;
-                AddRowsDelegate = () => AddRows(tempDataGridView,management.GetAllReaders());
+                CurrentList = () => management.GetAllReaders().ToList<IItemProperties>();
             }
         }
     }
