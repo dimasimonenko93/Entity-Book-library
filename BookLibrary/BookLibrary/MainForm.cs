@@ -11,33 +11,30 @@ namespace BookLibrary
 {
     public partial class MainForm : Form
     {
-        Management management;
-
-        DataGridView currentDataGridView;
+        Repository repository;
 
         DataGridView dataGridViewBooks;
         DataGridView dataGridViewReaders;
 
+        DataGridView currentDataGridView;
+
+        List<IItemProperties> currentList;
+
         delegate int BeginEdit();
-        delegate void EndEdit(int Id, string columnName, object cellValue);
-        delegate List<IItemProperties> GetAll();
+        delegate void EndEditHandler(int Id, string columnName, object cellValue);
 
         BeginEdit ReturnNewObjectIdFromDB;
-        EndEdit SetValue;
-        GetAll CurrentList;
-        GetAll NewList = () => new List<IItemProperties>();
+        EndEditHandler SetValue;
 
         public MainForm()
         {
             InitializeComponent();
 
-            management = new Management();
+            repository = new Repository();
 
-            dataGridViewBooks = CreateNewDataGridViewTab("Books", management.GetAllBooks());
-            AddRows(dataGridViewBooks, management.GetAllBooks().ToList<IItemProperties>());
+            dataGridViewBooks = CreateNewDataGridViewTab("Books", repository.GetAllBooks());
 
-            dataGridViewReaders = CreateNewDataGridViewTab("Readers", management.GetAllReaders());
-            AddRows(dataGridViewReaders, management.GetAllReaders().ToList<IItemProperties>());
+            dataGridViewReaders = CreateNewDataGridViewTab("Readers", repository.GetAllReaders());
 
             SetDelegates();
         }
@@ -48,22 +45,22 @@ namespace BookLibrary
             tbSearch.ForeColor = Color.Black;
         }
 
-        private void tbSearch_KeyDown(object sender, KeyEventArgs e) // Search in current DGV, not in GetAll();
+        private void tbSearch_KeyDown(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
             {
                 if(string.IsNullOrWhiteSpace(tbSearch.Text))
                 {
                     currentDataGridView.Rows.Clear();
-                    AddRows(currentDataGridView, CurrentList());
+                    AddRows(currentDataGridView, currentList);
                 }
                 else
                 {
                     currentDataGridView.Rows.Clear();
 
-                    var list = NewList();
+                    var list = new List<IItemProperties>();
 
-                    foreach(var item in CurrentList())
+                    foreach (var item in currentList)
                     {
                         var properties = item.GetType().GetProperties();
 
@@ -95,7 +92,7 @@ namespace BookLibrary
             }
         }
 
-        private void dataGridViewBooks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             var dataGrid = (DataGridView)sender;
 
@@ -103,7 +100,6 @@ namespace BookLibrary
             string columnName = dataGrid.Columns[e.ColumnIndex].Name;
             var cellValue = dataGrid.CurrentCell.Value;
 
-            //management.SetBookValue(bookId, columnName, value);
             SetValue(Id, columnName, cellValue);
         }
 
@@ -113,7 +109,7 @@ namespace BookLibrary
             {
                 foreach(DataGridViewRow rows in currentDataGridView.SelectedRows)
                 {
-                    management.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
+                    repository.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
                     try
                     {
                         currentDataGridView.Rows.Remove(rows);
@@ -139,9 +135,9 @@ namespace BookLibrary
                 Dock = DockStyle.Fill,
             };
             dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
-            dataGridView.CellEndEdit += dataGridViewBooks_CellEndEdit;
+            dataGridView.CellEndEdit += dataGridView_CellEndEdit;
             AddColumns(dataGridView, typeof(T).GetProperties());
-            //AddRows(dataGridView, getAll);
+            AddRows(dataGridView, getAll);
 
             tabControl.TabPages[TabName].Controls.Add(dataGridView);
 
@@ -156,7 +152,7 @@ namespace BookLibrary
             }
         }
 
-        private void AddRows(DataGridView dgv, List<IItemProperties> getAll)
+        private void AddRows<T>(DataGridView dgv, List<T> getAll)
         {
             foreach(var item in getAll)
             {
@@ -187,12 +183,12 @@ namespace BookLibrary
                 ReturnNewObjectIdFromDB = () =>
                 {
                     var book = new BookProperties();
-                    management.CreateBook(book);
+                    repository.CreateBook(book);
                     return book.Id;
                 };
 
-                SetValue = management.SetBookValue;
-                CurrentList = () => management.GetAllBooks().ToList<IItemProperties>();
+                SetValue = repository.SetBookValue;
+                currentList =  repository.GetAllBooks().ToList<IItemProperties>();
             }
             else if(tabControl.SelectedTab.Name == dataGridViewReaders.Name)
             {
@@ -201,12 +197,12 @@ namespace BookLibrary
                 ReturnNewObjectIdFromDB = () =>
                 {
                     var reader = new ReaderProperties();
-                    management.CreateReader(reader);
+                    repository.CreateReader(reader);
                     return reader.Id;
                 };
 
-                SetValue = management.SetReaderValue;
-                CurrentList = () => management.GetAllReaders().ToList<IItemProperties>();
+                SetValue = repository.SetReaderValue;
+                currentList = repository.GetAllReaders().ToList<IItemProperties>();
             }
         }
     }

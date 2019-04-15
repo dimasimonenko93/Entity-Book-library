@@ -8,11 +8,11 @@ using BookLibrary.Models;
 
 namespace BusinessLogic
 {
-    public class Management
+    public class Repository
     {
         private EntitiesBase dataBase;
 
-        public Management()
+        public Repository()
         {
             dataBase = new EntitiesBase();
         }
