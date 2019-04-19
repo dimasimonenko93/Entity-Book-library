@@ -7,24 +7,16 @@ using System.Windows.Forms;
 using BookLibrary.Models;
 using BusinessLogic;
 
-namespace BookLibrary
+namespace BookLibrary.WinForm
 {
     public partial class MainForm : Form
     {
         Repository repository;
 
-        DataGridView dataGridViewBooks;
-        DataGridView dataGridViewReaders;
+        DataGridTabPage currentTab;
+        DataGridTabPage tabWithBooks;
+        DataGridTabPage tabWithReaders;
 
-        DataGridView currentDataGridView;
-
-        List<IItemProperties> currentList;
-
-        delegate int BeginEdit();
-        delegate void EndEditHandler(int Id, string columnName, object cellValue);
-
-        BeginEdit ReturnNewObjectIdFromDB;
-        EndEditHandler SetValue;
 
         public MainForm()
         {
@@ -32,11 +24,25 @@ namespace BookLibrary
 
             repository = new Repository();
 
-            dataGridViewBooks = CreateNewDataGridViewTab("Books", repository.GetAllBooks());
+            tabWithBooks = new DataGridTabPage("Books", typeof(BookProperties).GetProperties(), repository.GetAllBooks().ToList<IItemProperties>());
+            tabWithBooks.ReturnNewObjectIdFromDB = () => {var book = new BookProperties(); repository.CreateBook(book);  return book.Id; };
+            tabWithBooks.SetValue = repository.SetBookValue;
+            tabWithBooks.dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
+            tabWithBooks.dataGridView.CellEndEdit += dataGridView_CellEndEdit;
+            tabWithBooks.Enter += (object sender, EventArgs e) => { currentTab = tabWithBooks; };
 
-            dataGridViewReaders = CreateNewDataGridViewTab("Readers", repository.GetAllReaders());
+            tabControl.TabPages.Add(tabWithBooks);
+            tabControl.TabPages[tabWithBooks.Name].Controls.Add(tabWithBooks.dataGridView);
 
-            SetDelegates();
+            tabWithReaders = new DataGridTabPage("Readers", typeof(ReaderProperties).GetProperties(), repository.GetAllReaders().ToList<IItemProperties>());
+            tabWithReaders.ReturnNewObjectIdFromDB = () => { var reader = new ReaderProperties(); repository.CreateReader(reader); return reader.Id; };
+            tabWithReaders.SetValue = repository.SetReaderValue;
+            tabWithReaders.dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
+            tabWithReaders.dataGridView.CellEndEdit += dataGridView_CellEndEdit;
+            tabWithReaders.Enter += (object sender, EventArgs e) => { currentTab = tabWithReaders; };
+
+            tabControl.TabPages.Add(tabWithReaders);
+            tabControl.TabPages[tabWithReaders.Name].Controls.Add(tabWithReaders.dataGridView);
         }
 
         private void tbSearch_MouseClick(object sender, MouseEventArgs e)
@@ -51,16 +57,16 @@ namespace BookLibrary
             {
                 if(string.IsNullOrWhiteSpace(tbSearch.Text))
                 {
-                    currentDataGridView.Rows.Clear();
-                    AddRows(currentDataGridView, currentList);
+                    currentTab.dataGridView.Rows.Clear();
+                    currentTab.AddRows(currentTab.currentList);
                 }
                 else
                 {
-                    currentDataGridView.Rows.Clear();
+                    currentTab.dataGridView.Rows.Clear();
 
                     var list = new List<IItemProperties>();
 
-                    foreach (var item in currentList)
+                    foreach (var item in currentTab.currentList)
                     {
                         var properties = item.GetType().GetProperties();
 
@@ -74,135 +80,45 @@ namespace BookLibrary
                         }
                     }
 
-                    AddRows(currentDataGridView, list);
+                    currentTab.AddRows(list);
                 }
             }
         }
 
         private void dataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
-            var dataGrid = (DataGridView)sender;
-
-            if(dataGrid.CurrentRow.Cells[0].Value == null)
+            if(currentTab.dataGridView.CurrentRow.Cells[0].Value == null)
             {
-                //var book = new BookProperties();
-                //management.CreateBook(book);
-                //dataGrid.CurrentRow.Cells[0].Value = book.Id;
-                dataGrid.CurrentRow.Cells[0].Value = ReturnNewObjectIdFromDB();
+                currentTab.dataGridView.CurrentRow.Cells[0].Value = currentTab.ReturnNewObjectIdFromDB();
             }
         }
 
         private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            var dataGrid = (DataGridView)sender;
+            int Id = Convert.ToInt32(currentTab.dataGridView[0, e.RowIndex].Value);
+            string columnName = currentTab.dataGridView.Columns[e.ColumnIndex].Name;
+            var cellValue = currentTab.dataGridView.CurrentCell.Value;
+            //var cellValue = Convert.ToInt32(currentTab.dataGridView.CurrentCell.Value); // boxing/unboxing error. Type of output value must be type of input value
 
-            int Id = Convert.ToInt32(dataGrid[0, e.RowIndex].Value);
-            string columnName = dataGrid.Columns[e.ColumnIndex].Name;
-            var cellValue = dataGrid.CurrentCell.Value;
-
-            SetValue(Id, columnName, cellValue);
+            currentTab.SetValue(Id, columnName, cellValue);
         }
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if(currentDataGridView.SelectedRows.Count > 0)
+            if(currentTab.dataGridView.SelectedRows.Count > 0)
             {
-                foreach(DataGridViewRow rows in currentDataGridView.SelectedRows)
+                foreach(DataGridViewRow rows in currentTab.dataGridView.SelectedRows)
                 {
                     repository.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
                     try
                     {
-                        currentDataGridView.Rows.Remove(rows);
+                        currentTab.dataGridView.Rows.Remove(rows);
                     }
                     catch
                     {
 
                     }
                 }
-            }
-        }
-
-        private DataGridView CreateNewDataGridViewTab<T>(string TabName, List<T> getAll)
-        {
-            TabPage tp = new TabPage(TabName);
-            tp.Name = TabName;
-
-            tabControl.TabPages.Add(tp);
-
-            DataGridView dataGridView = new DataGridView()
-            {
-                Name = TabName,
-                Dock = DockStyle.Fill,
-            };
-            dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
-            dataGridView.CellEndEdit += dataGridView_CellEndEdit;
-            AddColumns(dataGridView, typeof(T).GetProperties());
-            AddRows(dataGridView, getAll);
-
-            tabControl.TabPages[TabName].Controls.Add(dataGridView);
-
-            return dataGridView;
-        }
-
-        private void AddColumns(DataGridView dgv, PropertyInfo[] properties)
-        {
-            foreach(var p in properties)
-            {
-                dgv.Columns.Add(p.Name, p.Name);
-            }
-        }
-
-        private void AddRows<T>(DataGridView dgv, List<T> getAll)
-        {
-            foreach(var item in getAll)
-            {
-                var properties = item.GetType().GetProperties();
-                var row = new DataGridViewRow();
-
-                foreach(var p in properties)
-                {
-                    var cell = new DataGridViewTextBoxCell();
-                    cell.Value = p.GetValue(item);
-                    row.Cells.Add(cell);
-                }
-                dgv.Rows.Add(row);
-            }
-        }
-
-        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            SetDelegates();
-        }
-
-        private void SetDelegates()
-        {
-            if(tabControl.SelectedTab.Name == dataGridViewBooks.Name)
-            {
-                currentDataGridView = dataGridViewBooks;
-
-                ReturnNewObjectIdFromDB = () =>
-                {
-                    var book = new BookProperties();
-                    repository.CreateBook(book);
-                    return book.Id;
-                };
-
-                SetValue = repository.SetBookValue;
-                currentList =  repository.GetAllBooks().ToList<IItemProperties>();
-            }
-            else if(tabControl.SelectedTab.Name == dataGridViewReaders.Name)
-            {
-                currentDataGridView = dataGridViewReaders;
-
-                ReturnNewObjectIdFromDB = () =>
-                {
-                    var reader = new ReaderProperties();
-                    repository.CreateReader(reader);
-                    return reader.Id;
-                };
-
-                SetValue = repository.SetReaderValue;
-                currentList = repository.GetAllReaders().ToList<IItemProperties>();
             }
         }
     }

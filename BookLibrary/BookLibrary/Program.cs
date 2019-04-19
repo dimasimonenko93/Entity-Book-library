@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace BookLibrary
+namespace BookLibrary.WinForm
 {
     static class Program
     {
