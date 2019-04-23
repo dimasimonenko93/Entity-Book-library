@@ -13,9 +13,9 @@ namespace BookLibrary.WinForm
     {
         Repository repository;
 
-        DataGridTabPage currentTab;
-        DataGridTabPage tabWithBooks;
-        DataGridTabPage tabWithReaders;
+        EntityDataGridView currentDataGrid;
+        EntityDataGridView dataGridBooks;
+        EntityDataGridView dataGridReaders;
 
 
         public MainForm()
@@ -24,25 +24,27 @@ namespace BookLibrary.WinForm
 
             repository = new Repository();
 
-            tabWithBooks = new DataGridTabPage("Books", typeof(BookProperties).GetProperties(), repository.GetAllBooks().ToList<IItemProperties>());
-            tabWithBooks.ReturnNewObjectIdFromDB = () => {var book = new BookProperties(); repository.CreateBook(book);  return book.Id; };
-            tabWithBooks.SetValue = repository.SetBookValue;
-            tabWithBooks.dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
-            tabWithBooks.dataGridView.CellEndEdit += dataGridView_CellEndEdit;
-            tabWithBooks.Enter += (object sender, EventArgs e) => { currentTab = tabWithBooks; };
+            dataGridBooks = new EntityDataGridView("Books")
+            {
+                ReturnNewObjectIdFromDB = () => { var book = new BookProperties(); repository.CreateBook(book); return book.Id; },
+                SetValue = repository.SetBookValue,
+                currentList = repository.GetAllBooks().ToList<IItemProperties>()
+            };
+            dataGridBooks.AddColumns(typeof(BookProperties).GetProperties());
+            dataGridBooks.AddRows(repository.GetAllBooks().ToList<IItemProperties>());
+            AddTabPage(dataGridBooks);
 
-            tabControl.TabPages.Add(tabWithBooks);
-            tabControl.TabPages[tabWithBooks.Name].Controls.Add(tabWithBooks.dataGridView);
+            currentDataGrid = dataGridBooks;
 
-            tabWithReaders = new DataGridTabPage("Readers", typeof(ReaderProperties).GetProperties(), repository.GetAllReaders().ToList<IItemProperties>());
-            tabWithReaders.ReturnNewObjectIdFromDB = () => { var reader = new ReaderProperties(); repository.CreateReader(reader); return reader.Id; };
-            tabWithReaders.SetValue = repository.SetReaderValue;
-            tabWithReaders.dataGridView.CellBeginEdit += dataGridView_CellBeginEdit;
-            tabWithReaders.dataGridView.CellEndEdit += dataGridView_CellEndEdit;
-            tabWithReaders.Enter += (object sender, EventArgs e) => { currentTab = tabWithReaders; };
-
-            tabControl.TabPages.Add(tabWithReaders);
-            tabControl.TabPages[tabWithReaders.Name].Controls.Add(tabWithReaders.dataGridView);
+            dataGridReaders = new EntityDataGridView("Readers")
+            {
+                ReturnNewObjectIdFromDB = () => { var reader = new ReaderProperties(); repository.CreateReader(reader); return reader.Id; },
+                SetValue = repository.SetReaderValue,
+                currentList = repository.GetAllReaders().ToList<IItemProperties>()
+            };
+            dataGridReaders.AddColumns(typeof(ReaderProperties).GetProperties());
+            dataGridReaders.AddRows(repository.GetAllReaders().ToList<IItemProperties>());
+            AddTabPage(dataGridReaders);
         }
 
         private void tbSearch_MouseClick(object sender, MouseEventArgs e)
@@ -57,16 +59,16 @@ namespace BookLibrary.WinForm
             {
                 if(string.IsNullOrWhiteSpace(tbSearch.Text))
                 {
-                    currentTab.dataGridView.Rows.Clear();
-                    currentTab.AddRows(currentTab.currentList);
+                    currentDataGrid.Rows.Clear();
+                    currentDataGrid.AddRows(currentDataGrid.currentList);
                 }
                 else
                 {
-                    currentTab.dataGridView.Rows.Clear();
+                    currentDataGrid.Rows.Clear();
 
                     var list = new List<IItemProperties>();
 
-                    foreach (var item in currentTab.currentList)
+                    foreach (var item in currentDataGrid.currentList)
                     {
                         var properties = item.GetType().GetProperties();
 
@@ -79,40 +81,21 @@ namespace BookLibrary.WinForm
                             }
                         }
                     }
-
-                    currentTab.AddRows(list);
+                    currentDataGrid.AddRows(list);
                 }
             }
         }
 
-        private void dataGridView_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
-        {
-            if(currentTab.dataGridView.CurrentRow.Cells[0].Value == null)
-            {
-                currentTab.dataGridView.CurrentRow.Cells[0].Value = currentTab.ReturnNewObjectIdFromDB();
-            }
-        }
-
-        private void dataGridView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
-        {
-            int Id = Convert.ToInt32(currentTab.dataGridView[0, e.RowIndex].Value);
-            string columnName = currentTab.dataGridView.Columns[e.ColumnIndex].Name;
-            var cellValue = currentTab.dataGridView.CurrentCell.Value;
-            //var cellValue = Convert.ToInt32(currentTab.dataGridView.CurrentCell.Value); // boxing/unboxing error. Type of output value must be type of input value
-
-            currentTab.SetValue(Id, columnName, cellValue);
-        }
-
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if(currentTab.dataGridView.SelectedRows.Count > 0)
+            if(currentDataGrid.SelectedRows.Count > 0)
             {
-                foreach(DataGridViewRow rows in currentTab.dataGridView.SelectedRows)
+                foreach(DataGridViewRow rows in currentDataGrid.SelectedRows)
                 {
                     repository.DeleteBook(Convert.ToInt32(rows.Cells[0].Value));
                     try
                     {
-                        currentTab.dataGridView.Rows.Remove(rows);
+                        currentDataGrid.Rows.Remove(rows);
                     }
                     catch
                     {
@@ -120,6 +103,14 @@ namespace BookLibrary.WinForm
                     }
                 }
             }
+        }
+
+        private void AddTabPage(EntityDataGridView dataGridView)
+        {
+            TabPage tabPage = new TabPage(dataGridView.Name);
+            tabControl.TabPages.Add(tabPage);
+            tabControl.TabPages[tabControl.TabCount - 1].Controls.Add(dataGridView);
+            tabPage.Enter += (object sender, EventArgs e) => { currentDataGrid = dataGridView; };
         }
     }
 }

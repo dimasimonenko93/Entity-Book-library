@@ -9,10 +9,8 @@ using System.Windows.Forms;
 
 namespace BookLibrary.WinForm
 {
-    public class DataGridTabPage : TabPage
+    public class EntityDataGridView : DataGridView
     {
-        public DataGridView dataGridView;
-
         public List<IItemProperties> currentList;
 
         public delegate int BeginEditHandler();
@@ -21,24 +19,20 @@ namespace BookLibrary.WinForm
         public BeginEditHandler ReturnNewObjectIdFromDB;
         public EndEditHandler SetValue;
 
-        public DataGridTabPage(string text, PropertyInfo[] properties, List<IItemProperties> currentList) : base(text)
+        public EntityDataGridView(string Name)
         {
-            Name = text;
-            this.currentList = currentList;
+            this.Name = Name;
+            Dock = DockStyle.Fill;
 
-            dataGridView = new DataGridView();
-            dataGridView.Name = text;
-            dataGridView.Dock = DockStyle.Fill;
-
-            AddColumns(properties);
-            AddRows(currentList);
+            CellBeginEdit += dgv_CellBeginEdit;
+            CellEndEdit += dgv_CellEndEdit;
         }
 
         public void AddColumns(PropertyInfo[] properties)
         {
             foreach (var p in properties)
             {
-                dataGridView.Columns.Add(p.Name, p.Name);
+                Columns.Add(p.Name, p.Name);
             }
         }
 
@@ -55,8 +49,26 @@ namespace BookLibrary.WinForm
                     cell.Value = p.GetValue(item);
                     row.Cells.Add(cell);
                 }
-                dataGridView.Rows.Add(row);
+                Rows.Add(row);
             }
+        }
+
+        private void dgv_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
+        {
+            if (CurrentRow.Cells[0].Value == null)
+            {
+                CurrentRow.Cells[0].Value = ReturnNewObjectIdFromDB();
+            }
+        }
+
+        private void dgv_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            int Id = Convert.ToInt32(this[0, e.RowIndex].Value);
+            string columnName = Columns[e.ColumnIndex].Name;
+            var cellValue = CurrentCell.Value;
+            //var cellValue = Convert.ToInt32(currentTab.dataGridView.CurrentCell.Value); // boxing/unboxing error. Type of output value must be type of input value
+
+            SetValue(Id, columnName, cellValue);
         }
     }
 }
