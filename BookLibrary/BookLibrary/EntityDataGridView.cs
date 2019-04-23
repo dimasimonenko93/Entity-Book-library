@@ -1,4 +1,5 @@
-﻿using BookLibrary.Models;
+﻿using BookLibrary.BL;
+using BookLibrary.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,16 +14,22 @@ namespace BookLibrary.WinForm
     {
         public List<IItemProperties> currentList;
 
-        public delegate int BeginEditHandler();
-        public delegate void EndEditHandler(int Id, string columnName, object cellValue);
-
-        public BeginEditHandler ReturnNewObjectIdFromDB;
-        public EndEditHandler SetValue;
-
-        public EntityDataGridView(string Name)
+        public Action<int> DeleteItem;
+        public Func<int> ReturnNewObjectIdFromDB;
+        public Action<int, string, object> SetValue;
+        
+        public EntityDataGridView(string Name, IRepository repository, PropertyInfo[] properties)
         {
             this.Name = Name;
             Dock = DockStyle.Fill;
+
+            DeleteItem = (int id) => { repository.Delete(id); currentList = repository.GetAll(); };
+            ReturnNewObjectIdFromDB = repository.Create;
+            SetValue = repository.SetValue;
+            currentList = repository.GetAll();
+
+            AddColumns(properties);
+            AddRows(repository.GetAll());
 
             CellBeginEdit += dgv_CellBeginEdit;
             CellEndEdit += dgv_CellEndEdit;
@@ -32,7 +39,20 @@ namespace BookLibrary.WinForm
         {
             foreach (var p in properties)
             {
-                Columns.Add(p.Name, p.Name);
+                DataGridViewColumn column;
+                if(p.PropertyType == typeof(bool))
+                {
+                    column = new DataGridViewCheckBoxColumn();
+                    column.CellTemplate = new DataGridViewCheckBoxCell();
+                }
+                else
+                {
+                    column = new DataGridViewTextBoxColumn();
+                    column.CellTemplate = new DataGridViewTextBoxCell();
+                }
+                column.Name = p.Name;
+                column.HeaderText = p.Name;
+                Columns.Add(column);
             }
         }
 
@@ -50,6 +70,36 @@ namespace BookLibrary.WinForm
                     row.Cells.Add(cell);
                 }
                 Rows.Add(row);
+            }
+        }
+
+        public void FindAll(string text)
+        {
+            if(string.IsNullOrWhiteSpace(text))
+            {
+                Rows.Clear();
+                AddRows(currentList);
+            }
+            else
+            {
+                Rows.Clear();
+
+                var list = new List<IItemProperties>();
+
+                foreach(var item in currentList)
+                {
+                    var properties = item.GetType().GetProperties();
+
+                    foreach(var p in properties)
+                    {
+                        if(Convert.ToString(p.GetValue(item)).Contains(text)) // when tbSearch.Text = "s" - return all
+                        {
+                            list.Add(item);
+                            break;
+                        }
+                    }
+                }
+                AddRows(list);
             }
         }
 
