@@ -2,7 +2,7 @@
 
 namespace BookLibrary.Models
 {
-    public class ReaderProperties : IItemProperties
+    public class Reader
     {
         public int    Id          { get; set; }
         public string Name        { get; set; }
@@ -12,7 +12,7 @@ namespace BookLibrary.Models
         public int    PhoneNumber { get; set; }
         public string Mail        { get; set; }
 
-        public List<BookProperties> BooksOnHand  = new List<BookProperties>();
-        public List<BookProperties> BooksHistory = new List<BookProperties>();
+        public List<Book> BooksOnHand  = new List<Book>();
+        public List<Book> BooksHistory = new List<Book>();
     }
 }

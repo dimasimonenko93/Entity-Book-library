@@ -10,7 +10,7 @@ namespace BookLibrary
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<LibraryContext>()); // Recreate DB with losing data, if structure of my database was changed.
         }
 
-        public DbSet<BookProperties>   Books   { get; set; }
-        public DbSet<ReaderProperties> Readers { get; set; }
+        public DbSet<Book>   Books   { get; set; }
+        public DbSet<Reader> Readers { get; set; }
     }
 }

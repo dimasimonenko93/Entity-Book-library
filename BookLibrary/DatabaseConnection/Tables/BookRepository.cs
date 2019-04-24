@@ -8,7 +8,7 @@ namespace BookLibrary.DAL
 {
     public class BookRepository
     {
-        public BookProperties Get(int id)
+        public Book Get(int id)
         {
             using (var db = new LibraryContext())
             {
@@ -16,7 +16,7 @@ namespace BookLibrary.DAL
             }
         }
 
-        public List<BookProperties> GetAll()
+        public List<Book> GetAll()
         {
             using (var db = new LibraryContext())
             {
@@ -24,7 +24,7 @@ namespace BookLibrary.DAL
             }
         }
 
-        public void Create(BookProperties book)
+        public void Create(Book book)
         {
             using (var db = new LibraryContext())
             {
@@ -33,7 +33,7 @@ namespace BookLibrary.DAL
             }
         }
 
-        public void Update(BookProperties book)
+        public void Update(Book book)
         {
             using (var db = new LibraryContext())
             {
@@ -47,7 +47,7 @@ namespace BookLibrary.DAL
         {
             using (var db = new LibraryContext())
             {
-                BookProperties book = db.Books.Find(id);
+                Book book = db.Books.Find(id);
                 if (book != null)
                     db.Books.Remove(book);
                 db.SaveChanges();

@@ -20,13 +20,13 @@ namespace BookLibrary.WinForm
         {
             InitializeComponent();
 
-            dataGridBooks = new EntityDataGridView("Books", new BooksRepository(), typeof(BookProperties).GetProperties());
-            AddTabPage(dataGridBooks);
+            dataGridBooks = new EntityDataGridView(new BooksRepository());
+            AddTabPage("Books", dataGridBooks);
 
             currentDataGrid = dataGridBooks;
 
-            dataGridReaders = new EntityDataGridView("Readers", new ReadersRepository(), typeof(ReaderProperties).GetProperties());
-            AddTabPage(dataGridReaders);
+            dataGridReaders = new EntityDataGridView(new ReadersRepository());
+            AddTabPage("Readers", dataGridReaders);
         }
 
         private void tbSearch_MouseClick(object sender, MouseEventArgs e)
@@ -45,26 +45,15 @@ namespace BookLibrary.WinForm
 
         private void btnRemove_Click(object sender, EventArgs e)
         {
-            if(currentDataGrid.SelectedRows.Count > 0)
-            {
-                foreach(DataGridViewRow rows in currentDataGrid.SelectedRows)
-                {
-                    try
-                    {
-                        currentDataGrid.Rows.Remove(rows);
-                        currentDataGrid.DeleteItem(Convert.ToInt32(rows.Cells[0].Value));
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
+            currentDataGrid.RemoveSelectedRows();
         }
 
-        private void AddTabPage(EntityDataGridView dataGridView)
+        private void AddTabPage(string Name, EntityDataGridView dataGridView)
         {
-            TabPage tabPage = new TabPage(dataGridView.Name);
+            TabPage tabPage = new TabPage();
             tabControl.TabPages.Add(tabPage);
+            tabControl.TabPages[tabControl.TabCount - 1].Name = Name;
+            tabControl.TabPages[tabControl.TabCount - 1].Text = Name;
             tabControl.TabPages[tabControl.TabCount - 1].Controls.Add(dataGridView);
             tabPage.Enter += (object sender, EventArgs e) => { currentDataGrid = dataGridView; };
         }

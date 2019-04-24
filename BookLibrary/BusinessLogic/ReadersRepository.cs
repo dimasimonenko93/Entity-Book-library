@@ -11,16 +11,19 @@ namespace BookLibrary.BL
 {
     public class ReadersRepository : IRepository
     {
+        public PropertyInfo[] properties { get; set; }
+
         private ReaderRepository readers;
 
         public ReadersRepository()
         {
             readers = new ReaderRepository();
+            properties = typeof(Reader).GetProperties();
         }
 
         public int Create()
         {
-            ReaderProperties reader = new ReaderProperties();
+            Reader reader = new Reader();
             readers.Create(reader);
             return reader.Id;
         }
@@ -30,14 +33,14 @@ namespace BookLibrary.BL
             readers.Delete(readerId);
         }
 
-        public List<IItemProperties> GetAll()
+        public List<object> GetAll()
         {
-            return readers.GetAll().ToList<IItemProperties>();
+            return readers.GetAll().ToList<object>();
         }
 
         public void SetValue(int readerId, string nameOfProperty, object value)
         {
-            ReaderProperties reader = readers.Get(readerId);
+            Reader reader = readers.Get(readerId);
 
             PropertyInfo[] properties = reader.GetType().GetProperties();
 

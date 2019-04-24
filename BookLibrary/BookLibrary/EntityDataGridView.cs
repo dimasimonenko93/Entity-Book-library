@@ -12,23 +12,14 @@ namespace BookLibrary.WinForm
 {
     public class EntityDataGridView : DataGridView
     {
-        public List<IItemProperties> currentList;
+        private IRepository repository;
 
-        public Action<int> DeleteItem;
-        public Func<int> ReturnNewObjectIdFromDB;
-        public Action<int, string, object> SetValue;
-        
-        public EntityDataGridView(string Name, IRepository repository, PropertyInfo[] properties)
+        public EntityDataGridView(IRepository repository)
         {
-            this.Name = Name;
+            this.repository = repository;
             Dock = DockStyle.Fill;
 
-            DeleteItem = (int id) => { repository.Delete(id); currentList = repository.GetAll(); };
-            ReturnNewObjectIdFromDB = repository.Create;
-            SetValue = repository.SetValue;
-            currentList = repository.GetAll();
-
-            AddColumns(properties);
+            AddColumns(repository.properties);
             AddRows(repository.GetAll());
 
             CellBeginEdit += dgv_CellBeginEdit;
@@ -56,7 +47,7 @@ namespace BookLibrary.WinForm
             }
         }
 
-        public void AddRows(List<IItemProperties> getAll)
+        public void AddRows(List<object> getAll)
         {
             foreach (var item in getAll)
             {
@@ -78,15 +69,15 @@ namespace BookLibrary.WinForm
             if(string.IsNullOrWhiteSpace(text))
             {
                 Rows.Clear();
-                AddRows(currentList);
+                AddRows(repository.GetAll());
             }
             else
             {
                 Rows.Clear();
 
-                var list = new List<IItemProperties>();
+                var list = new List<object>();
 
-                foreach(var item in currentList)
+                foreach(var item in repository.GetAll())
                 {
                     var properties = item.GetType().GetProperties();
 
@@ -103,11 +94,29 @@ namespace BookLibrary.WinForm
             }
         }
 
+        public void RemoveSelectedRows()
+        {
+            if (SelectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow rows in SelectedRows)
+                {
+                    try
+                    {
+                        Rows.Remove(rows);
+                        repository.Delete(Convert.ToInt32(rows.Cells[0].Value));
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+
         private void dgv_CellBeginEdit(object sender, DataGridViewCellCancelEventArgs e)
         {
             if (CurrentRow.Cells[0].Value == null)
             {
-                CurrentRow.Cells[0].Value = ReturnNewObjectIdFromDB();
+                CurrentRow.Cells[0].Value = repository.Create();
             }
         }
 
@@ -118,7 +127,7 @@ namespace BookLibrary.WinForm
             var cellValue = CurrentCell.Value;
             //var cellValue = Convert.ToInt32(currentTab.dataGridView.CurrentCell.Value); // boxing/unboxing error. Type of output value must be type of input value
 
-            SetValue(Id, columnName, cellValue);
+            repository.SetValue(Id, columnName, cellValue);
         }
     }
 }

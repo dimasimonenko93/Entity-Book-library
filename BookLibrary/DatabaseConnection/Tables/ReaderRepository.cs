@@ -7,7 +7,7 @@ namespace BookLibrary.DAL
 {
     public class ReaderRepository
     {
-        public ReaderProperties Get(int id)
+        public Reader Get(int id)
         {
             using (var db = new LibraryContext())
             {
@@ -15,7 +15,7 @@ namespace BookLibrary.DAL
             }
         }
 
-        public List<ReaderProperties> GetAll()
+        public List<Reader> GetAll()
         {
             using (var db = new LibraryContext())
             {
@@ -23,7 +23,7 @@ namespace BookLibrary.DAL
             }
         }
 
-        public void Create(ReaderProperties reader)
+        public void Create(Reader reader)
         {
             using (var db = new LibraryContext())
             {
@@ -32,7 +32,7 @@ namespace BookLibrary.DAL
             }
         }
 
-        public void Update(ReaderProperties reader)
+        public void Update(Reader reader)
         {
             using (var db = new LibraryContext())
             {
@@ -45,7 +45,7 @@ namespace BookLibrary.DAL
         {
             using (var db = new LibraryContext())
             {
-                ReaderProperties reader = db.Readers.Find(id);
+                Reader reader = db.Readers.Find(id);
                 if (reader != null)
                     db.Readers.Remove(reader);
                 db.SaveChanges();

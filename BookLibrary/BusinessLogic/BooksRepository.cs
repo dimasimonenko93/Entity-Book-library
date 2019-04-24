@@ -11,16 +11,19 @@ namespace BookLibrary.BL
 {
     public class BooksRepository : IRepository
     {
+        public PropertyInfo[] properties { get; set; }
+
         private BookRepository books;
 
         public BooksRepository()
         {
             books = new BookRepository();
+            properties = typeof(Book).GetProperties();
         }
 
         public int Create()
         {
-            BookProperties book = new BookProperties();
+            Book book = new Book();
             books.Create(book);
             return book.Id;
         }
@@ -30,14 +33,14 @@ namespace BookLibrary.BL
             books.Delete(bookId);
         }
 
-        public List<IItemProperties> GetAll()
+        public List<object> GetAll()
         {
-            return books.GetAll().ToList<IItemProperties>();
+            return books.GetAll().ToList<object>();
         }
 
         public void SetValue(int bookId, string nameOfProperty, object value)
         {
-            BookProperties book = books.Get(bookId);
+            Book book = books.Get(bookId);
 
             PropertyInfo[] properties = book.GetType().GetProperties();
 
