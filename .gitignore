@@ -13,3 +13,8 @@ BookLibrary/ClassLibrary1/Class1.cs
 BookLibrary/BusinessLogic/bin/
 BookLibrary/DatabaseConnection/bin/
 BookLibrary/BookLibrary.Models/obj/
+BookLibrary/BookLibrary.DAL/obj/
+BookLibrary/BookLibrary.DAL/bin/
+BookLibrary/BookLibrary.BL/obj/
+BookLibrary/BookLibrary.BL/bin/Debug/
+BookLibrary/BookLibrary.BL/bin/

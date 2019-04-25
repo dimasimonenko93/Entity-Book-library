@@ -47,9 +47,9 @@ namespace BookLibrary.WinForm
             }
         }
 
-        public void AddRows(List<object> getAll)
+        public void AddRows(List<object> repositoryEntities)
         {
-            foreach (var item in getAll)
+            foreach (var item in repositoryEntities)
             {
                 var properties = item.GetType().GetProperties();
                 var row = new DataGridViewRow();

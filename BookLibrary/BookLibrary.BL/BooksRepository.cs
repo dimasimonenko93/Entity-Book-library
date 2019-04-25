@@ -13,11 +13,11 @@ namespace BookLibrary.BL
     {
         public PropertyInfo[] properties { get; set; }
 
-        private BookRepository books;
+        private BookDAL books;
 
         public BooksRepository()
         {
-            books = new BookRepository();
+            books = new BookDAL();
             properties = typeof(Book).GetProperties();
         }
 

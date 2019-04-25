@@ -13,11 +13,11 @@ namespace BookLibrary.BL
     {
         public PropertyInfo[] properties { get; set; }
 
-        private ReaderRepository readers;
+        private ReaderDAL readers;
 
         public ReadersRepository()
         {
-            readers = new ReaderRepository();
+            readers = new ReaderDAL();
             properties = typeof(Reader).GetProperties();
         }
 

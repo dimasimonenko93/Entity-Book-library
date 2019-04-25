@@ -54,13 +54,13 @@
     <Compile Include="ReadersRepository.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BookLibrary.DAL\BookLibrary.DAL.csproj">
+      <Project>{300dc048-af62-4325-89ae-8be5e5e12e0a}</Project>
+      <Name>BookLibrary.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BookLibrary.Models\BookLibrary.Models.csproj">
       <Project>{f09c1e6e-9110-46e5-902e-3d910f9f92a4}</Project>
       <Name>BookLibrary.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DatabaseConnection\BookLibrary.DAL.csproj">
-      <Project>{300dc048-af62-4325-89ae-8be5e5e12e0a}</Project>
-      <Name>BookLibrary.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

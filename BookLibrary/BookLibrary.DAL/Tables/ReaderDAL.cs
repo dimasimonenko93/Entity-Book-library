@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BookLibrary.DAL
 {
-    public class ReaderRepository
+    public class ReaderDAL
     {
         public Reader Get(int id)
         {

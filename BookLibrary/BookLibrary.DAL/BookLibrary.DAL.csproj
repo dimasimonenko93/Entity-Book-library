@@ -49,11 +49,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntitiesBase.cs" />
-    <Compile Include="Tables\BookRepository.cs" />
+    <Compile Include="Tables\BookDAL.cs" />
     <Compile Include="LibraryContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tables\ReaderRepository.cs" />
+    <Compile Include="Tables\ReaderDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
