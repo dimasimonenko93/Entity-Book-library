@@ -6,52 +6,39 @@ using System.Linq;
 
 namespace BookLibrary.DAL
 {
-    public class BookDAL
+    public class BookDAL : DbContext
     {
+        public DbSet<Book> Books { get; set; }
+
         public Book Get(int id)
         {
-            using (var db = new LibraryContext())
-            {
-                return db.Books.Find(id);
-            }
+            return Books.Find(id);
         }
 
         public List<Book> GetAll()
         {
-            using (var db = new LibraryContext())
-            {
-                return db.Books.ToList();
-            }
+            return Books.ToList();
         }
 
         public void Create(Book book)
         {
-            using (var db = new LibraryContext())
-            {
-                db.Books.Add(book);
-                db.SaveChanges();
-            }
+            Books.Add(book);
+            SaveChanges();
         }
 
         public void Update(Book book)
         {
-            using (var db = new LibraryContext())
-            {
-                db.Entry(book).State = EntityState.Modified; // Update all properties
-                //db.Books.Attach(book);                     // Update only changed properties // Dont work !!
-                db.SaveChanges();
-            }
+            Entry(book).State = EntityState.Modified; // Update all properties
+            //db.Books.Attach(book);                  // Update only changed properties // Dont work !!
+            SaveChanges();
         }
 
         public void Delete(int id)
         {
-            using (var db = new LibraryContext())
-            {
-                Book book = db.Books.Find(id);
-                if (book != null)
-                    db.Books.Remove(book);
-                db.SaveChanges();
-            }
+            Book book = Books.Find(id);
+            if (book != null)
+                Books.Remove(book);
+            SaveChanges();
         }
     }
 }
