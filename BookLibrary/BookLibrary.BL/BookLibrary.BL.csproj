@@ -52,6 +52,7 @@
     <Compile Include="IRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReadersRepository.cs" />
+    <Compile Include="Repositoty.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BookLibrary.DAL\BookLibrary.DAL.csproj">

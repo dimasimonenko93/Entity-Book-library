@@ -10,10 +10,10 @@ namespace BookLibrary.BL
 {
     public interface IRepository
     {
-        PropertyInfo[] properties { get; set; }
-        List<object> GetAll();
-        int Create();
-        void Delete(int bookId);
-        void SetValue(int bookId, string nameOfProperty, object value);
+        PropertyInfo[] EntityProperties { get; set; }
+        List<object> GetAllItems();
+        int CreateItem();
+        void DeleteItem(int itemId);
+        void SetValueItem(int itemkId, string nameOfProperty, object value);
     }
 }

@@ -11,34 +11,34 @@ namespace BookLibrary.BL
 {
     public class ReadersRepository : IRepository
     {
-        public PropertyInfo[] properties { get; set; }
+        public PropertyInfo[] EntityProperties { get; set; }
 
         private ReaderDAL readers;
 
         public ReadersRepository()
         {
             readers = new ReaderDAL();
-            properties = typeof(Reader).GetProperties();
+            EntityProperties = typeof(Reader).GetProperties();
         }
 
-        public int Create()
+        public int CreateItem()
         {
             Reader reader = new Reader();
             readers.Create(reader);
             return reader.Id;
         }
 
-        public void Delete(int readerId)
+        public void DeleteItem(int readerId)
         {
             readers.Delete(readerId);
         }
 
-        public List<object> GetAll()
+        public List<object> GetAllItems()
         {
             return readers.GetAll().ToList<object>();
         }
 
-        public void SetValue(int readerId, string nameOfProperty, object value)
+        public void SetValueItem(int readerId, string nameOfProperty, object value)
         {
             Reader reader = readers.Get(readerId);
 

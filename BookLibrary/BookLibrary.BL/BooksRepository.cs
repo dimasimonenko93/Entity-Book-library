@@ -11,34 +11,34 @@ namespace BookLibrary.BL
 {
     public class BooksRepository : IRepository
     {
-        public PropertyInfo[] properties { get; set; }
+        public PropertyInfo[] EntityProperties { get; set; }
 
         private BookDAL books;
 
         public BooksRepository()
         {
             books = new BookDAL();
-            properties = typeof(Book).GetProperties();
+            EntityProperties = typeof(Book).GetProperties();
         }
 
-        public int Create()
+        public int CreateItem()
         {
             Book book = new Book();
             books.Create(book);
             return book.Id;
         }
 
-        public void Delete(int bookId)
+        public void DeleteItem(int bookId)
         {
             books.Delete(bookId);
         }
 
-        public List<object> GetAll()
+        public List<object> GetAllItems()
         {
             return books.GetAll().ToList<object>();
         }
 
-        public void SetValue(int bookId, string nameOfProperty, object value)
+        public void SetValueItem(int bookId, string nameOfProperty, object value)
         {
             Book book = books.Get(bookId);
 

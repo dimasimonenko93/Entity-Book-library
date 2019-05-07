@@ -19,8 +19,8 @@ namespace BookLibrary.WinForm
             this.repository = repository;
             Dock = DockStyle.Fill;
 
-            AddColumns(repository.properties);
-            AddRows(repository.GetAll());
+            AddColumns(repository.EntityProperties);
+            AddRows(repository.GetAllItems());
 
             CellBeginEdit += dgv_CellBeginEdit;
             CellEndEdit += dgv_CellEndEdit;
@@ -73,7 +73,7 @@ namespace BookLibrary.WinForm
             if(string.IsNullOrWhiteSpace(text))
             {
                 Rows.Clear();
-                AddRows(repository.GetAll());
+                AddRows(repository.GetAllItems());
             }
             else
             {
@@ -81,7 +81,7 @@ namespace BookLibrary.WinForm
 
                 var list = new List<object>();
 
-                foreach(var item in repository.GetAll())
+                foreach(var item in repository.GetAllItems())
                 {
                     var properties = item.GetType().GetProperties();
 
@@ -107,7 +107,7 @@ namespace BookLibrary.WinForm
                     try
                     {
                         Rows.Remove(rows);
-                        repository.Delete(Convert.ToInt32(rows.Cells[0].Value));
+                        repository.DeleteItem(Convert.ToInt32(rows.Cells[0].Value));
                     }
                     catch
                     {
@@ -120,7 +120,7 @@ namespace BookLibrary.WinForm
         {
             if (CurrentRow.Cells[0].Value == null)
             {
-                CurrentRow.Cells[0].Value = repository.Create();
+                CurrentRow.Cells[0].Value = repository.CreateItem();
             }
         }
 
@@ -131,7 +131,7 @@ namespace BookLibrary.WinForm
             var cellValue = CurrentCell.Value;
             //var cellValue = Convert.ToInt32(currentTab.dataGridView.CurrentCell.Value); // boxing/unboxing error. Type of output value must be type of input value
 
-            repository.SetValue(Id, columnName, cellValue);
+            repository.SetValueItem(Id, columnName, cellValue);
         }
     }
 }
