@@ -58,11 +58,9 @@ namespace BookLibrary.WinForm
 
                 var properties = item.GetType().GetProperties();
 
-                int countOfCell = 0;
                 foreach (var p in properties)
                 {
-                    Rows[countOfRows].Cells[countOfCell].Value = p.GetValue(item);
-                    countOfCell++;
+                    Rows[countOfRows].Cells[p.Name].Value = p.GetValue(item);
                 }
                 countOfRows++;
             }

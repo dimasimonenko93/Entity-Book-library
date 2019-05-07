@@ -2,7 +2,7 @@
 
 namespace BookLibrary.Models
 {
-    public class Reader
+    public class Reader : IModel
     {
         public int    Id          { get; set; }
         public string Name        { get; set; }

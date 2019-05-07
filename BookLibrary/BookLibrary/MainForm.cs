@@ -17,12 +17,12 @@ namespace BookLibrary.WinForm
         {
             InitializeComponent();
 
-            var dataGridBooks = new EntityDataGridView(new BooksRepository());
+            var dataGridBooks = new EntityDataGridView(new Repository<Book>());
             AddTabPage("Books", dataGridBooks);
 
             currentDataGrid = dataGridBooks;
 
-            var dataGridReaders = new EntityDataGridView(new ReadersRepository());
+            var dataGridReaders = new EntityDataGridView(new Repository<Reader>());
             AddTabPage("Readers", dataGridReaders);
         }
 

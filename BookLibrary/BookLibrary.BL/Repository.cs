@@ -9,23 +9,24 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.BL
 {
-    public class Repositoty<T> where T : class, new()
+    public class Repository<T> : IRepository where T : class, IModel, new()
     {
         public PropertyInfo[] EntityProperties { get; set; }
 
         private DAL<T> items;
 
-        public Repositoty()
+        public Repository()
         {
             items = new DAL<T>();
             EntityProperties = typeof(T).GetProperties();
         }
 
-        public T CreateItem()
+        public int CreateItem()
         {
             T item = new T();
             items.Create(item);
-            return item;
+            IModel itemID = item;
+            return itemID.Id;
         }
 
         public void DeleteItem(int itemId)
