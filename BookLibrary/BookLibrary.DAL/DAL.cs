@@ -8,9 +8,16 @@ using System.Threading.Tasks;
 
 namespace BookLibrary.DAL
 {
-    public class DAL<T> : DbContext where T : class, new()
+    public class DAL<T> where T : class, new()
     {
-        public DbSet<T> Items { get; set; }
+        private LibraryContext<T> dataBase;
+        private DbSet<T> Items { get; set; }
+
+        public DAL()
+        {
+            dataBase = new LibraryContext<T>();
+            Items = dataBase.Set<T>();
+        }
 
         public T Get(int id)
         {
@@ -25,13 +32,13 @@ namespace BookLibrary.DAL
         public void Create(T item)
         {
             Items.Add(item);
-            SaveChanges();
+            dataBase.SaveChanges();
         }
 
         public void Update(T item)
         {
-            Entry(item).State = EntityState.Modified;
-            SaveChanges();
+            dataBase.Entry(item).State = EntityState.Modified;
+            dataBase.SaveChanges();
         }
 
         public void Delete(int id)
@@ -39,7 +46,7 @@ namespace BookLibrary.DAL
             T item = Items.Find(id);
             if (item != null)
                 Items.Remove(item);
-            SaveChanges();
+            dataBase.SaveChanges();
         }
     }
 }

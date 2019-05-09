@@ -49,20 +49,16 @@ namespace BookLibrary.WinForm
 
         public void AddRows(List<object> repositoryEntities)
         {
-            int countOfRows = 0;
-
             foreach (var item in repositoryEntities)
             {
-                var row = new DataGridViewRow();
-                Rows.Add(row);
+                Rows.Add();
 
                 var properties = item.GetType().GetProperties();
 
                 foreach (var p in properties)
                 {
-                    Rows[countOfRows].Cells[p.Name].Value = p.GetValue(item);
+                    Rows[Rows.Count-2].Cells[p.Name].Value = p.GetValue(item);
                 }
-                countOfRows++;
             }
         }
 
